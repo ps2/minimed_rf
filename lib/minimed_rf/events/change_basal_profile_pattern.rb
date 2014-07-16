@@ -1,0 +1,26 @@
+# 0800265B11030E00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+# 3567,1/3/14,17:27:38,1/3/14 17:27:38,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ChangeBasalProfilePattern,"PATTERN_NAME=standard, NUM_PROFILES=1, ACTION_REQUESTOR=pump",12226881723,52912277,276,MiniMed 530G - 551
+
+
+module MinimedRF
+  module PumpEvents
+    class ChangeBasalProfilePattern < Base
+      def self.event_type_code
+        0x08
+      end
+
+      def length
+        152
+      end
+
+      def to_s
+        "ChangeBasalProfilePattern #{timestamp_str}"
+      end
+
+      def timestamp
+        parse_date(2)
+      end
+
+    end
+  end
+end
