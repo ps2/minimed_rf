@@ -1,7 +1,12 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :c2
-    def initialize(data)
+    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :c2, :channel, :capture_time, :coding_errors
+
+    def initialize
+      coding_errors = 0
+    end
+
+    def data=(data)
       @marker = data.getbyte(0)
       @address = data.byteslice(1,3).unpack("H*").first
       @c1 = data.getbyte(4)
@@ -28,7 +33,7 @@ module MinimedRF
     end
 
     def valid?
-      @marker == 0xa7 &&
+      !@raw_data.nil? &&
       (crc.nil? || crc == computed_crc)
     end
 
@@ -61,13 +66,42 @@ module MinimedRF
       rval = ""
       msg_ok = true
       if !crc.nil? && crc != computed_crc
+        rval << "#{capture_time.localtime} #{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
         rval << "(crc mismatch: 0x#{crc.to_s(16)} != 0x#{computed_crc.to_s(16)}) "
-      end
-      if valid?
-        rval << "#{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % computed_crc} "
+      elsif valid?
+        rval << "#{capture_time.localtime} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
+      elsif raw_data
+        rval << "#{capture_time.localtime} invalid: #{raw_data.unpack("H*").first}"
+      else
+        rval << "#{capture_time.localtime} no data"
       end
       #rval << ", raw = #{encode.unpack("H*")}"
       rval
+    end
+
+    def self.decode_from_radio(bytes)
+      p = Packet.new
+      coding_errors = 0
+      radio_bytes = [bytes].pack('H*').bytes
+      bits = radio_bytes.map {|d| "%08b" % d}.join
+      decoded_symbols = []
+      bits.scan(/.{6}/).each do |word_bits|
+        break if word_bits == '000000'
+        symbol = CODE_SYMBOLS[word_bits]
+        if symbol.nil?
+          coding_errors += 1
+        else
+          decoded_symbols << symbol
+        end
+      end
+      if decoded_symbols.count > 12
+        if decoded_symbols.length.odd?
+          decoded_symbols = decoded_symbols[0..-2]
+        end
+        p.data = [decoded_symbols.join].pack("H*")
+      end
+      p.coding_errors = coding_errors
+      p
     end
   end
 end
