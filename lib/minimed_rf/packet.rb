@@ -1,6 +1,6 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :c2, :channel, :capture_time, :coding_errors
+    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :c2, :channel, :capture_time, :coding_errors, :marker
 
     def initialize
       coding_errors = 0
@@ -69,7 +69,7 @@ module MinimedRF
         rval << "#{capture_time.localtime} #{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
         rval << "(crc mismatch: 0x#{crc.to_s(16)} != 0x#{computed_crc.to_s(16)}) "
       elsif valid?
-        rval << "#{capture_time.localtime} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
+        rval << "#{capture_time.localtime} #{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
       elsif raw_data
         rval << "#{capture_time.localtime} invalid: #{raw_data.unpack("H*").first}"
       else
