@@ -65,15 +65,16 @@ module MinimedRF
     def to_s
       rval = ""
       msg_ok = true
+      rval = "#{channel} #{capture_time.localtime} "
       if !crc.nil? && crc != computed_crc
-        rval << "#{capture_time.localtime} #{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
+        rval << "#{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
         rval << "(crc mismatch: 0x#{crc.to_s(16)} != 0x#{computed_crc.to_s(16)}) "
       elsif valid?
-        rval << "#{capture_time.localtime} #{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
+        rval << "#{"%02x" % @marker} #{address} #{"%02x" % c1} #{"%02x" % c2} #{body.unpack("H*").first} #{"%02x" % crc} "
       elsif raw_data
-        rval << "#{capture_time.localtime} invalid: #{raw_data.unpack("H*").first}"
+        rval << "invalid: #{raw_data.unpack("H*").first}"
       else
-        rval << "#{capture_time.localtime} no data"
+        rval << "no data"
       end
       #rval << ", raw = #{encode.unpack("H*")}"
       rval
