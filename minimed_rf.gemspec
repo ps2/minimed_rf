@@ -8,4 +8,5 @@ Gem::Specification.new do |s|
   s.email       = 'pete@schwamb.net'
   s.files       = ["lib/minimed_rf.rb"]
   s.license     = 'MIT'
+  s.add_dependency "colorize"
 end
