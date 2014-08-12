@@ -1,13 +1,17 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :channel, :capture_time, :coding_errors, :marker
+    attr_accessor :address, :cmd, :body, :crc, :raw_data, :c1, :channel, :capture_time, :coding_errors, :message_type
 
     def initialize
       coding_errors = 0
     end
 
+    def raw_data_str
+      @raw_data.unpack('H*').first
+    end
+
     def data=(data)
-      @marker = data.getbyte(0)
+      @message_type = data.getbyte(0)
       @address = data.byteslice(1,3).unpack("H*").first
       @c1 = data.getbyte(4)
       @body = data.byteslice(5..-2)
@@ -74,10 +78,10 @@ module MinimedRF
       msg_ok = true
       rval = "#{channel} #{local_capture_time} "
       if !crc.nil? && crc != computed_crc
-        rval << "#{"%02x" % @marker} #{address} #{"%02x" % c1} #{body.unpack("H*").first} #{"%02x" % crc} "
+        rval << "#{"%02x" % @message_type} #{address} #{"%02x" % c1} #{body.unpack("H*").first} #{"%02x" % crc} "
         rval << "(crc mismatch: 0x#{crc.to_s(16)} != 0x#{computed_crc.to_s(16)}) "
       elsif valid?
-        rval << "#{"%02x" % @marker} #{address} #{"%02x" % c1} #{body.unpack("H*").first} #{"%02x" % crc} "
+        rval << "#{"%02x" % @message_type} #{address} #{"%02x" % c1} #{body.unpack("H*").first} #{"%02x" % crc} "
       elsif raw_data
         rval << "invalid: #{raw_data.unpack("H*").first}"
       else
@@ -85,6 +89,16 @@ module MinimedRF
       end
       #rval << ", raw = #{encode.unpack("H*")}"
       rval
+    end
+
+    def to_message
+      Messages::MAP[message_type].new(raw_data[5..-2])
+    end
+
+    def self.from_hex(hex)
+      p = Packet.new
+      p.data = [hex].pack('H*')
+      p
     end
 
     def self.decode_from_radio(bytes)
