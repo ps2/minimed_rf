@@ -1,3 +1,4 @@
+require 'minimed_rf/messages/message_base'
 require 'minimed_rf/messages/glucose_sensor_data'
 
 module MinimedRF
