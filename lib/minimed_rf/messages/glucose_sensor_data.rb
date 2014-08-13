@@ -1,10 +1,7 @@
 require 'colorize'
 
 module MinimedRF
-  class GlucoseSensorData < MessageBase
-
-    # a2 597055 04 9541153a2e0e080b00353400015f0301061a167a0504000c0300008b1539000e080b0000b1
-
+  class GlucoseSensorData < Message
     def bit_blocks
       {
         minute: [234,6],

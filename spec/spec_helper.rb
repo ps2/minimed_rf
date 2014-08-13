@@ -1,0 +1,1 @@
+require 'minimed_rf'
