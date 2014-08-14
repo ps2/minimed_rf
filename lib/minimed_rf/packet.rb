@@ -92,7 +92,7 @@ module MinimedRF
     end
 
     def to_message
-      Messages::MAP[message_type].new(raw_data[5..-2])
+      MessageTypeMap[message_type].new(raw_data[5..-2])
     end
 
     def self.from_hex(hex)

@@ -1,5 +1,6 @@
 module MinimedRF
   class Message
+    
     def initialize(data)
       @bits = data.unpack("B*").first
     end
