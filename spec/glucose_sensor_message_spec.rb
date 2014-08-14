@@ -3,12 +3,11 @@ require 'spec_helper'
 describe MinimedRF::GlucoseSensorMessage do
 
   it "should decode fields" do
-    hex_data = "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071"
-    packet = MinimedRF::Packet.from_hex(hex_data)
-    message = packet.to_message
-    expect(message.glucose).to eq 123
-    expect(message.previous_glucose).to eq 123
-    expect(message.timestamp).to eq Time.parse('2014-08-11 23:02:00')
+    hex_data = "9041040d240e0718006a6d00022103020683068a051500000172008b040b000e07180000"
+    message = MinimedRF::GlucoseSensorMessage.from_hex(hex_data)
+    expect(message.glucose).to eq 213
+    expect(message.previous_glucose).to eq 218
+    expect(message.timestamp).to eq Time.parse('2014-07-24 04:11:00')
   end
 
 end

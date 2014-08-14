@@ -6,7 +6,7 @@ module MinimedRF
       coding_errors = 0
     end
 
-    def raw_data_str
+    def raw_hex_data
       @raw_data.unpack('H*').first
     end
 

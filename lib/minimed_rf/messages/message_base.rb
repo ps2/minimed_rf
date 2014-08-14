@@ -1,8 +1,12 @@
 module MinimedRF
   class Message
-    
+
     def initialize(data)
       @bits = data.unpack("B*").first
+    end
+
+    def self.from_hex(hex_str)
+      new([hex_str].pack('H*'))
     end
 
     def b(name)
