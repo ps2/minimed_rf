@@ -2,7 +2,7 @@ require 'colorize'
 
 module MinimedRF
   class GlucoseSensorMessage < Message
-    def bit_blocks
+    def self.bit_blocks
       {
         minute: [234,6],
         hour: [227,5],
