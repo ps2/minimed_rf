@@ -1,5 +1,5 @@
 module MinimedRF
   MessageTypeMap = {
-    0xa2 => GlucoseSensorMessage
+    0x04 => GlucoseSensorMessage
   }
 end

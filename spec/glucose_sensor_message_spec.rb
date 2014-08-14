@@ -8,6 +8,7 @@ describe MinimedRF::GlucoseSensorMessage do
     message = packet.to_message
     expect(message.glucose).to eq 123
     expect(message.previous_glucose).to eq 123
+    expect(message.timestamp).to eq Time.parse('2014-08-11 23:02:00')
   end
 
 end
