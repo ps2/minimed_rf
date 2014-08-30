@@ -1,6 +1,6 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :cmd, :body, :crc, :raw_data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
+    attr_accessor :address, :body, :crc, :raw_data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
 
     def initialize
       coding_errors = 0
@@ -37,6 +37,7 @@ module MinimedRF
 
     def valid?
       !@raw_data.nil? &&
+      @raw_data.length > 4 &&
       (crc.nil? || crc == computed_crc)
     end
 

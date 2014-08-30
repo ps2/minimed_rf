@@ -11,4 +11,20 @@ describe MinimedRF::GlucoseSensorMessage do
     expect(message.timestamp).to eq Time.parse('2014-07-24 04:11:00')
   end
 
+  it "should handle messages with weak signal flag" do
+    hex_data = "e0410f30090e08180002020003cc030307142523142a00000000006d0f2f000e08180000"
+    message = MinimedRF::GlucoseSensorMessage.from_hex(hex_data)
+    expect(message.glucose).to eq nil
+    expect(message.previous_glucose).to eq 218
+    expect(message.timestamp).to eq Time.parse('2014-07-24 04:11:00')
+  end
+
+  it "should detect meter bg now messages" do
+    hex_data = "a04116211f0e081800010100037e030305f72c1cffff000c0000006e1620000e08180000"
+    message = MinimedRF::GlucoseSensorMessage.from_hex(hex_data)
+    expect(message.glucose).to eq nil
+    expect(message.previous_glucose).to eq 218
+    expect(message.timestamp).to eq Time.parse('2014-07-24 04:11:00')
+  end
+  
 end
