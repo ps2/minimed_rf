@@ -26,13 +26,16 @@ module MinimedRF
     end
 
     def parse_glucose(high, low)
+      val = (high << 1) + low
+      val < 10 ? nil : val
+    end
 
     def glucose
-      (b(:bg_h) << 1) + b(:bg_l)
+      parse_glucose(b(:bg_h), b(:bg_l))
     end
 
     def previous_glucose
-      (b(:prev_bg_h) << 1) + b(:prev_bg_l)
+      parse_glucose(b(:prev_bg_h), b(:prev_bg_l))
     end
 
     def to_s
