@@ -54,20 +54,18 @@ module MinimedRF
     end
 
     def encode
-      packet = msg_data + [computed_crc].pack('c*')
       codes = []
-      packet.bytes.each { |b|
+      @raw_data.bytes.each { |b|
         codes << CODES[(b >> 4)]
         codes << CODES[b & 0xf]
       }
       # aaaaaabb bbbbcccc ccdddddd
-      bits = codes.map {|code| "%06b" % code}.join + "010110" + "000000" + "000000" # Add "7-"
-      encoded_bytes = []
+      bits = codes.map {|code| "%06b" % code}.join + "000000000000"
+      output = ""
       bits.scan(/.{8}/).each do |byte_bits|
-        encoded_bytes << Integer("0b"+byte_bits)
+        output << "%02x" % Integer("0b"+byte_bits)
       end
-      encoded_bytes << 0x00
-      encoded_bytes.pack('c*')
+      output
     end
 
     def local_capture_time

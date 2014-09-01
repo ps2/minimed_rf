@@ -27,7 +27,7 @@ module MinimedRF
 
     def parse_glucose(high, low)
       val = (high << 1) + low
-      val < 10 ? nil : val
+      val < 20 ? nil : val
     end
 
     def glucose
