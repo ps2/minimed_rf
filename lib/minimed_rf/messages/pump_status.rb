@@ -1,10 +1,9 @@
-require 'colorize'
 
 module MinimedRF
-  class GlucoseSensorMessage < Message
+  class PumpStatus < Message
     def self.bit_blocks
       {
-        sequence: [0,8],
+        sequence: [1,7],
         minute: [234,6],
         hour: [227,5],
         day: [267,5],
@@ -39,7 +38,7 @@ module MinimedRF
     end
 
     def to_s
-      "GlucoseSensorMessage: #{sequence} #{timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      "PumpStatus: #{sequence} #{timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
     end
   end
 end
