@@ -4,11 +4,16 @@ module MinimedRF
     def self.bit_blocks
       {
         sequence: [1,7],
-        minute: [234,6],
-        hour: [227,5],
-        day: [267,5],
-        month: [260, 4],
-        year: [248, 8],
+        pump_hour: [19,5],
+        pump_minute: [26,6],
+        pump_year: [40,8],
+        pump_month: [52,4],
+        pump_day: [59,5],
+        sensor_minute: [234,6],
+        sensor_hour: [227,5],
+        sensor_day: [267,5],
+        sensor_month: [260, 4],
+        sensor_year: [248, 8],
         bg_h: [72, 8],
         bg_l: [199, 1],
         prev_bg_h: [80, 8],
@@ -16,9 +21,15 @@ module MinimedRF
       }
     end
 
-    def timestamp
-      if b(:year) > 0
-        Time.new(b(:year) + 2000, b(:month), b(:day), b(:hour), b(:minute))
+    def pump_timestamp
+      if b(:pump_year) > 0
+        Time.new(b(:pump_year) + 2000, b(:pump_month), b(:pump_day), b(:pump_hour), b(:pump_minute))
+      end
+    end
+
+    def sensor_timestamp
+      if b(:sensor_year) > 0
+        Time.new(b(:sensor_year) + 2000, b(:sensor_month), b(:sensor_day), b(:sensor_hour), b(:sensor_minute))
       end
     end
 
@@ -53,7 +64,7 @@ module MinimedRF
     end
 
     def to_s
-      "PumpStatus: ##{sequence} #{timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      "PumpStatus: ##{sequence} #{sensor_timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
     end
   end
 end
