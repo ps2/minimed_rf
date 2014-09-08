@@ -17,16 +17,31 @@ module MinimedRF
     end
 
     def timestamp
-      Time.new(b(:year) + 2000, b(:month), b(:day), b(:hour), b(:minute))
+      if b(:year) > 0
+        Time.new(b(:year) + 2000, b(:month), b(:day), b(:hour), b(:minute))
+      end
     end
 
     def sequence
       b(:sequence)
     end
 
+    def sensor_status
+      case b(:bg_h)
+      when 0
+        :sensor_missing
+      when 1
+        :meter_bg_now
+      when 2
+        :weak_signal
+      else
+        :ok
+      end
+    end
+
     def parse_glucose(high, low)
       val = (high << 1) + low
-      val < 20 ? nil : val
+      #val < 20 ? nil : val
     end
 
     def glucose
@@ -38,7 +53,7 @@ module MinimedRF
     end
 
     def to_s
-      "PumpStatus: #{sequence} #{timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      "PumpStatus: ##{sequence} #{timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
     end
   end
 end

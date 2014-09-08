@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'minimed_rf'
+rescue LoadError
+  require 'rubygems'
+  require 'minimed_rf'
+end
+
+def handle_input(input)
+  # remove spaces
+  input = input.gsub(/\W/,'')
+
+  # Look for second byte 00, which is inserted by RF Studio as length field?
+  if input[2,2] == "00"
+    input.slice!(2,2)
+  end
+
+  # try raw
+  packet = MinimedRF::Packet.decode_from_radio(input)
+
+  # try decoded
+  if !packet.valid?
+    packet = MinimedRF::Packet.from_hex(input)
+  end
+
+  puts packet.to_s
+
+end
+
+if ARGV.length > 0
+  handle_input(ARGV.first)
+else
+  while line = STDIN.gets
+    handle_input(line.chomp)
+  end
+end

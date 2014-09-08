@@ -11,9 +11,16 @@ module MinimedRF
     end
 
     def data=(data)
+      # 0xa2 (162) = pump <-> mysentry, alerts
+      # 0xa5 (165) = glucose meter (bayer contour)
+      # 0xa7 (167) = pump dump (from bayer contour nextlink)
+
       @packet_type = data.getbyte(0)
+
       @address = data.byteslice(1,3).unpack("H*").first
+
       @message_type = data.getbyte(4)
+
       @body = data.byteslice(5..-2)
       @crc = data.getbyte(-1)
       @raw_data = data
@@ -73,25 +80,20 @@ module MinimedRF
     end
 
     def to_s
-      rval = ""
-      msg_ok = true
-      rval = "#{channel} #{local_capture_time} "
-      if !crc.nil? && crc != computed_crc
-        rval << "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
-        rval << "(crc mismatch: 0x#{crc.to_s(16)} != 0x#{computed_crc.to_s(16)}) "
+      msg = to_message
+      if msg
+        "#{"%02x" % @packet_type} #{address} #{msg}"
       elsif valid?
-        rval << "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
-      elsif raw_data
-        rval << "invalid: #{raw_data.unpack("H*").first}"
+        "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
       else
-        rval << "no data"
+        "invalid: #{raw_data.unpack("H*").first}"
       end
-      #rval << ", raw = #{encode.unpack("H*")}"
-      rval
     end
 
     def to_message
-      MessageTypeMap[message_type].new(raw_data[5..-2])
+      if valid? && MessageTypeMap.include?(message_type)
+        MessageTypeMap[message_type].new(raw_data[5..-2])
+      end
     end
 
     def self.from_hex(hex)
@@ -100,10 +102,10 @@ module MinimedRF
       p
     end
 
-    def self.decode_from_radio(bytes)
+    def self.decode_from_radio(hex_str)
       p = Packet.new
       coding_errors = 0
-      radio_bytes = [bytes].pack('H*').bytes
+      radio_bytes = [hex_str].pack('H*').bytes
       bits = radio_bytes.map {|d| "%08b" % d}.join
       decoded_symbols = []
       bits.scan(/.{6}/).each do |word_bits|

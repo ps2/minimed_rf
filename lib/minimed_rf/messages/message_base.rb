@@ -20,6 +20,10 @@ module MinimedRF
       new([hex_str].pack('H*'))
     end
 
+    def hex_str
+      [@bits].pack("B*").unpack("H*").first
+    end
+
     def bit_blocks
       self.class.bit_blocks
     end
@@ -40,6 +44,9 @@ module MinimedRF
         end
       end
       print "\n"
+    end
+
+    def print_unused_bytes
     end
 
     def print_unused_bits

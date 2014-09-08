@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.email       = 'pete@schwamb.net'
   spec.files       = ["lib/minimed_rf.rb"]
   spec.license     = 'MIT'
+  spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   spec.add_dependency "colorize"
 
   spec.add_development_dependency "bundler", "~> 1.3"
