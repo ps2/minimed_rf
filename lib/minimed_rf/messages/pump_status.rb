@@ -17,7 +17,8 @@ module MinimedRF
         bg_h: [72, 8],
         bg_l: [199, 1],
         prev_bg_h: [80, 8],
-        prev_bg_l: [198, 1]
+        prev_bg_l: [198, 1],
+        active_ins: [181, 11]
       }
     end
 
@@ -50,6 +51,10 @@ module MinimedRF
       end
     end
 
+    def active_insulin
+      b(:active_ins) * 0.025
+    end
+
     def parse_glucose(high, low)
       val = (high << 1) + low
       #val < 20 ? nil : val
@@ -64,7 +69,23 @@ module MinimedRF
     end
 
     def to_s
-      "PumpStatus: ##{sequence} #{sensor_timestamp} - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      val = "PumpStatus: ##{sequence} #{pump_timestamp} - "
+
+      case sensor_status
+      when :sensor_missing
+        val << "Sensor missing"
+      when :meter_bg_now
+        val << "Meter BG Now"
+      when :weak_signal
+        val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      else
+        val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      end
+
+      if active_insulin > 0
+        val << " ActiveInsulin=#{active_insulin}"
+      end
+      val
     end
   end
 end

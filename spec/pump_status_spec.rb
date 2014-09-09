@@ -33,8 +33,12 @@ describe MinimedRF::PumpStatus do
     message = MinimedRF::PumpStatus.from_hex(hex_data)
     expect(message.sensor_status).to eq :sensor_missing
     expect(message.sensor_timestamp).to eq nil
-    #expect(message.b(:pump_minute)).to eq 11
-    #expect(message.b(:pump_hour)).to eq 8
+  end
+
+  it "should decode active insulin" do
+    hex_data = "3b4115342c0e090800989700034f03020620781809020027030000911532000e09080000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.active_insulin).to be_within(0.0001).of(0.975)
   end
 
 end

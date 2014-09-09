@@ -8,6 +8,8 @@ rescue LoadError
 end
 
 def handle_input(input)
+  return if input.length < 6 || input[0] == "#"
+
   # remove spaces
   input = input.gsub(/\W/,'')
 
