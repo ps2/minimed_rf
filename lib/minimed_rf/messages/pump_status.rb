@@ -75,7 +75,7 @@ module MinimedRF
       when :sensor_missing
         val << "Sensor missing"
       when :meter_bg_now
-        val << "Meter BG Now"
+        val << "Meter BG Now - PreviousGlucose=#{previous_glucose}"
       when :weak_signal
         val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
       else
