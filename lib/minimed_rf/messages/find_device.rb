@@ -18,7 +18,7 @@ module MinimedRF
     end
 
     def to_s
-      "FindDevice: ##{sequence} #{address}"
+      "FindDevice: ##{sequence} #{broadcast_address}"
     end
   end
 end
