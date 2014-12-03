@@ -35,6 +35,13 @@ describe MinimedRF::PumpStatus do
     expect(message.sensor_timestamp).to eq nil
   end
 
+  it "should handle sensor warm-up messages" do
+    hex_data = "ab411519290e0c020004040001120101063b0090ffff0024000000bb1517000e0c020000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.sensor_status).to eq :sensor_warmup
+    expect(message.sensor_timestamp).to eq Time.parse('2014-12-02 21:23:00')
+  end
+
   it "should decode active insulin" do
     hex_data = "3b4115342c0e090800989700034f03020620781809020027030000911532000e09080000"
     message = MinimedRF::PumpStatus.from_hex(hex_data)

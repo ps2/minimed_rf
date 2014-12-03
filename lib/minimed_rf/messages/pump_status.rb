@@ -46,6 +46,8 @@ module MinimedRF
         :meter_bg_now
       when 2
         :weak_signal
+      when 4
+        :sensor_warmup
       else
         :ok
       end
@@ -78,6 +80,8 @@ module MinimedRF
         val << "Meter BG Now - PreviousGlucose=#{previous_glucose}"
       when :weak_signal
         val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      when :sensor_warmup
+        val << "Sensor Warmup"
       else
         val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
       end
