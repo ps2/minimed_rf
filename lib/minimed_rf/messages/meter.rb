@@ -4,7 +4,8 @@ module MinimedRF
     # a5c527ad008e61
     def self.bit_blocks
       {
-        glucose_h: [0,8],
+        alert: [5,2],
+        glucose_h: [7,1],
         glucose_l: [8,8]
       }
     end
@@ -13,12 +14,19 @@ module MinimedRF
       (b(:glucose_h) << 8) + b(:glucose_l)
     end
 
-    def broadcast_address
-      hex_str[2,6]
+    def alert
+      case b(:alert)
+      when 3
+        "BG High"
+      end
     end
 
     def to_s
-      "Meter: #{glucose}"
+      if alert
+        "Meter: Alert - #{alert}"
+      else
+        "Meter: #{glucose}"
+      end
     end
   end
 end
