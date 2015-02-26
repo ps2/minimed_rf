@@ -11,6 +11,7 @@ module MinimedRF
     end
 
     def data=(data)
+      # Packet type (first byte of packet):
       # 0xa2 (162) = pump <-> mysentry, alerts
       # 0xa5 (165) = glucose meter (bayer contour)
       # 0xa7 (167) = pump dump (from bayer contour nextlink)
@@ -85,14 +86,24 @@ module MinimedRF
         "#{"%02x" % @packet_type} #{address} #{msg}"
       elsif valid?
         "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
-      else
+      elsif raw_data
         "invalid: #{raw_data.unpack("H*").first}"
+      else
+        "invalid: encoding errors"
       end
     end
 
     def to_message
-      if valid? && MessageTypeMap.include?(message_type)
-        MessageTypeMap[message_type].new(raw_data[5..-2])
+      if valid?
+        case packet_type
+        when 0xa2
+          if MessageTypeMap.include?(message_type)
+            MessageTypeMap[message_type].new(raw_data[5..-2])
+          end
+        when 0xa5
+
+          MinimedRF::Meter.new(raw_data[4..-2])
+        end
       end
     end
 

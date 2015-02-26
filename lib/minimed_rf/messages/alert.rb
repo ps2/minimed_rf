@@ -3,7 +3,8 @@ module MinimedRF
 
   AlertCodes = {
     0x33 => :max_hourly_bolus,
-    0x72 => :high_predicted
+    0x72 => :high_predicted,
+    0x73 => :low_predicted
   }
 
   class Alert < Message
@@ -32,6 +33,8 @@ module MinimedRF
         "MaxHourlyBolus"
       when :high_predicted
         "HighPredicted"
+      else
+        "Unknown(#{b(:alert_type)})"
       end
     end
 
