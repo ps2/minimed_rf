@@ -4,7 +4,8 @@ module MinimedRF
   AlertCodes = {
     0x33 => :max_hourly_bolus,
     0x72 => :high_predicted,
-    0x73 => :low_predicted
+    0x73 => :low_predicted,
+    0x68 => :meter_bg_now,
   }
 
   class Alert < Message
@@ -30,16 +31,18 @@ module MinimedRF
     def alert_type_str
       case alert_type
       when :max_hourly_bolus
-        "MaxHourlyBolus"
+        "Max Hourly Bolus"
       when :high_predicted
-        "HighPredicted"
+        "High Predicted"
+      when :meter_bg_now
+        "Meter BG Now"
       else
         "Unknown(#{b(:alert_type)})"
       end
     end
 
     def to_s
-      "Alert: ##{sequence} #{alert_type_str}"
+      "Alert: ##{sequence} \"#{alert_type_str}\""
     end
   end
 end

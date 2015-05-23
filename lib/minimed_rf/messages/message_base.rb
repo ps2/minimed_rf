@@ -1,3 +1,5 @@
+require 'colorize'
+
 module MinimedRF
   class Message
     attr_accessor :bits

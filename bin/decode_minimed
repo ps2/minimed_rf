@@ -27,6 +27,7 @@ def handle_input(input)
   end
   puts packet.raw_hex_data
   puts packet.to_s
+  #puts packet.to_message.print_unused_bits
 
 end
 

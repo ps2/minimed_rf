@@ -11,10 +11,12 @@ module MinimedRF
     end
 
     def data=(data)
-      # Packet type (first byte of packet):
-      # 0xa2 (162) = pump <-> mysentry, alerts
+      # Address type (first byte of packet):
+      # 0xa2 (162) = mysentry
       # 0xa5 (165) = glucose meter (bayer contour)
-      # 0xa7 (167) = pump dump (from bayer contour nextlink)
+      # 0xa7 (167) = pump
+      # 0xaa (170) = sensor
+      # 0xab (171) = sensor2
 
       @packet_type = data.getbyte(0)
 
