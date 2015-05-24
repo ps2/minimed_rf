@@ -14,7 +14,7 @@ module MinimedRF
         bg_h: [72, 8],
         prev_bg_h: [80, 8],
         field_x3: [94,1],
-        insulin_remaining: [102,10],
+        insulin_remaining: [101,11],
         field_x5: [116,4],
         #field_x6: [126,2],
         field_x7: [136,6],
@@ -60,6 +60,8 @@ module MinimedRF
         :weak_signal
       when 4
         :sensor_warmup
+      when 10
+        :sensor_lost
       else
         :ok
       end
@@ -106,9 +108,13 @@ module MinimedRF
         val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs"
       when :sensor_warmup
         val << "Sensor Warmup"
+      when :sensor_lost
+        val << "Sensor Lost"
       else
-        val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U"
+        val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
       end
+
+      val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U"
 
       if active_insulin > 0
         val << " ActiveInsulin=#{active_insulin}"

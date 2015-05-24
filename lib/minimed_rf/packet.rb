@@ -89,7 +89,7 @@ module MinimedRF
       elsif valid?
         "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
       elsif raw_data
-        "invalid: #{raw_data.unpack("H*").first}"
+        "invalid: #{raw_data.unpack("H*").first} expected_crc=#{"%02x" % computed_crc}"
       else
         "invalid: encoding errors"
       end
@@ -103,8 +103,9 @@ module MinimedRF
             MessageTypeMap[message_type].new(raw_data[5..-2])
           end
         when 0xa5
-
           MinimedRF::Meter.new(raw_data[4..-2])
+        when 0xa8
+          # Sensor
         end
       end
     end
