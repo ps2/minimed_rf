@@ -4,24 +4,24 @@ module MinimedRF
     def self.bit_blocks
       {
         sequence: [1,7],
-        #field_x1: [12,3],
+        trend: [12,3],
         pump_hour: [19,5],
         pump_minute: [26,6],
-        field_x2: [34,6],
+        #field_x2: [34,6],
         pump_year: [40,8],
         pump_month: [52,4],
         pump_day: [59,5],
         bg_h: [72, 8],
         prev_bg_h: [80, 8],
-        field_x3: [94,1],
+        #field_x3: [94,1],
         insulin_remaining: [101,11],
-        field_x5: [116,4],
+        #field_x5: [116,4],
         #field_x6: [126,2],
-        field_x7: [136,6],
+        #field_x7: [136,6],
         sensor_age: [144,8],
         sensor_remaining: [152,8],
-        field_x10: [160,8],
-        field_x11: [168,8],
+        #field_x10: [160,8],
+        #field_x11: [168,8],
         active_ins: [181, 11],
         prev_bg_l: [198, 1],
         bg_l: [199, 1],
@@ -48,6 +48,23 @@ module MinimedRF
 
     def sequence
       b(:sequence)
+    end
+
+    def trend
+      case b(:trend)
+      when 0b000
+        ""
+      when 0b001
+        "up"
+      when 0b010
+        "double up"
+      when 0b011
+        "down"
+      when 0b100
+        "double down"
+      else
+        "Unknown(#{b(:trend)})"
+      end
     end
 
     def sensor_status
@@ -112,6 +129,10 @@ module MinimedRF
         val << "Sensor Lost"
       else
         val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
+      end
+
+      unless trend.empty?
+        val << " Trend=#{trend}"
       end
 
       val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U"
