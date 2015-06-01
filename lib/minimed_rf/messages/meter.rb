@@ -5,13 +5,13 @@ module MinimedRF
     def self.bit_blocks
       {
         alert: [5,2],
-        glucose_h: [7,1],
-        glucose_l: [8,8]
+        glucose: [7,9]
       }
     end
 
     def glucose
-      (b(:glucose_h) << 8) + b(:glucose_l)
+      b(:glucose)
+      #(b(:glucose_h) << 8) + b(:glucose_l)
     end
 
     def alert

@@ -77,6 +77,8 @@ module MinimedRF
         :weak_signal
       when 4
         :sensor_warmup
+      when 7
+        :high_bg # Above 400
       when 10
         :sensor_lost
       else
@@ -127,6 +129,8 @@ module MinimedRF
         val << "Sensor Warmup"
       when :sensor_lost
         val << "Sensor Lost"
+      when :high_bg
+        val << "BG Above 400"
       else
         val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
       end
