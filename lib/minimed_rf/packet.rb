@@ -98,7 +98,7 @@ module MinimedRF
     def to_message
       if valid?
         case packet_type
-        when 0xa2
+        when 0xa2,0xa7
           if MessageTypeMap.include?(message_type)
             MessageTypeMap[message_type].new(raw_data[5..-2])
           end

@@ -34,7 +34,9 @@ module MinimedRF
       range = bit_blocks[name]
       raise "Unknown bit block: #{name}" if range.nil?
       #puts "b(#{name.inspect}) = #{range}"
-      Integer("0b" + @bits.send("[]", *range))
+      bits = "0b" + @bits.send("[]", *range)
+      return 0 if bits == "0b"
+      Integer(bits)
     end
 
     def print_bit_differences(other)

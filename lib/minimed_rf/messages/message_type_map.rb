@@ -10,6 +10,7 @@ module MinimedRF
     0x09 => FindDevice,      # From pump
     0x0a => DeviceLink,      # From linking device
     0x0b => PumpDump,       # 2014-09-08T23:14:57-0500 - a2 597055 0b 780001a7a7a7aaa39c9b9a9a9a9a9a9a9a9998979798999ea0a09c100000f2c1eb000000 41
+    0x5d => WakeUp,
   }
 
   MessageTypeMap.values.each { |m| m.check_bit_block_definitions }
