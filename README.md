@@ -1,6 +1,6 @@
 # minimed_rf
 
-Many Medtronic insulin pumps are capable of sending CGM data to a remote monitor called MySentry.  This project provides ruby libraries and tools to decode the message sent between the devices.  All information here is the result of me using non-medtronic hardware to listen to the radio transmissions and decoding it using software I've written.
+Many Medtronic insulin pumps are capable of sending CGM data to a remote monitor called MySentry.  This project provides ruby libraries and tools to decode the message sent between the devices.  To capture and send packets, you can use something like [RileyLink](https://github.com/ps2/rileylink) or an SDR. 
 
 ## rf modulation
 
