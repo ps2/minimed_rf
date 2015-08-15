@@ -25,7 +25,7 @@ def handle_input(input)
   if !packet.valid?
     packet = MinimedRF::Packet.from_hex(input)
   end
-  #puts packet.raw_hex_data
+  puts packet.raw_hex_data
   puts packet.to_s
   #puts packet.crc
   #puts packet.computed_crc

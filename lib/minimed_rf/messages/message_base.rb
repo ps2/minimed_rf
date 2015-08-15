@@ -50,6 +50,16 @@ module MinimedRF
       print "\n"
     end
 
+    def self.packetdiag
+      out = "packetdiag {\ncolwidth=32\n"
+      bit_blocks.keys.each do |k|
+        first = bit_blocks[k][0]
+        last = first + bit_blocks[k][1]-1
+        out << "#{first}-#{last}: #{k}\n"
+      end
+      out << "}\n"
+    end
+
     def print_unused_bytes
     end
 
