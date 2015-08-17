@@ -52,8 +52,11 @@ module MinimedRF
 
     def self.packetdiag
       out = "packetdiag {\ncolwidth=32\n"
+      out << "0-7: packet_type\n"
+      out << "8-31: addr\n"
+      out << "32-39: message_type\n"
       bit_blocks.keys.each do |k|
-        first = bit_blocks[k][0]
+        first = bit_blocks[k][0] + 40
         last = first + bit_blocks[k][1]-1
         out << "#{first}-#{last}: #{k}\n"
       end
