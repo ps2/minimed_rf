@@ -1,31 +1,31 @@
 # Packet Diagrams
 ## Alert
-![Alert](https://rawgit.com/ps2/minimed_rf/master/docs/Alert.svg)
+[alert.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/alert.rb)![Alert](https://rawgit.com/ps2/minimed_rf/master/docs/Alert.svg)
 
 ## AlertCleared
-![AlertCleared](https://rawgit.com/ps2/minimed_rf/master/docs/AlertCleared.svg)
+[alert_cleared.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/alert_cleared.rb)![AlertCleared](https://rawgit.com/ps2/minimed_rf/master/docs/AlertCleared.svg)
 
 ## DeviceLink
-![DeviceLink](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceLink.svg)
+[device_link.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/device_link.rb)![DeviceLink](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceLink.svg)
 
 ## DeviceTest
-![DeviceTest](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceTest.svg)
+[device_test.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/device_test.rb)![DeviceTest](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceTest.svg)
 
 ## FindDevice
-![FindDevice](https://rawgit.com/ps2/minimed_rf/master/docs/FindDevice.svg)
+[find_device.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/find_device.rb)![FindDevice](https://rawgit.com/ps2/minimed_rf/master/docs/FindDevice.svg)
 
 ## Meter
-![Meter](https://rawgit.com/ps2/minimed_rf/master/docs/Meter.svg)
+[meter.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/meter.rb)![Meter](https://rawgit.com/ps2/minimed_rf/master/docs/Meter.svg)
 
 ## PumpDump
-![PumpDump](https://rawgit.com/ps2/minimed_rf/master/docs/PumpDump.svg)
+[pump_dump.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/pump_dump.rb)![PumpDump](https://rawgit.com/ps2/minimed_rf/master/docs/PumpDump.svg)
 
 ## PumpStatus
-![PumpStatus](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatus.svg)
+[pump_status.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/pump_status.rb)![PumpStatus](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatus.svg)
 
 ## PumpStatusAck
-![PumpStatusAck](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatusAck.svg)
+[pump_status_ack.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/pump_status_ack.rb)![PumpStatusAck](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatusAck.svg)
 
 ## WakeUp
-![WakeUp](https://rawgit.com/ps2/minimed_rf/master/docs/WakeUp.svg)
+[wake_up.rb](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/wake_up.rb)![WakeUp](https://rawgit.com/ps2/minimed_rf/master/docs/WakeUp.svg)
 

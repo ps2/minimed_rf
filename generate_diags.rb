@@ -25,7 +25,10 @@ File.open('docs/README.md', "w") do |f|
   f.write("# Packet Diagrams\n")
   message_types.each do |message_type|
     class_name = message_type.split('::').last
+    message_class = MinimedRF.const_get(class_name)
     f.write("## #{class_name}\n")
+    filename = File.basename(message_class.method(:bit_blocks).source_location.first)
+    f.write("[#{filename}](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/#{filename})")
     f.write("![#{class_name}](https://rawgit.com/ps2/minimed_rf/master/docs/#{class_name}.svg)\n\n")
   end
 end
