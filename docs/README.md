@@ -1,31 +1,31 @@
 # Packet Diagrams
 ## Alert
-![Alert](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/Alert.svg)
+![Alert](https://rawgit.com/ps2/minimed_rf/master/docs/Alert.svg)
 
 ## AlertCleared
-![AlertCleared](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/AlertCleared.svg)
+![AlertCleared](https://rawgit.com/ps2/minimed_rf/master/docs/AlertCleared.svg)
 
 ## DeviceLink
-![DeviceLink](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/DeviceLink.svg)
+![DeviceLink](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceLink.svg)
 
 ## DeviceTest
-![DeviceTest](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/DeviceTest.svg)
+![DeviceTest](https://rawgit.com/ps2/minimed_rf/master/docs/DeviceTest.svg)
 
 ## FindDevice
-![FindDevice](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/FindDevice.svg)
+![FindDevice](https://rawgit.com/ps2/minimed_rf/master/docs/FindDevice.svg)
 
 ## Meter
-![Meter](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/Meter.svg)
+![Meter](https://rawgit.com/ps2/minimed_rf/master/docs/Meter.svg)
 
 ## PumpDump
-![PumpDump](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/PumpDump.svg)
+![PumpDump](https://rawgit.com/ps2/minimed_rf/master/docs/PumpDump.svg)
 
 ## PumpStatus
-![PumpStatus](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/PumpStatus.svg)
+![PumpStatus](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatus.svg)
 
 ## PumpStatusAck
-![PumpStatusAck](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/PumpStatusAck.svg)
+![PumpStatusAck](https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatusAck.svg)
 
 ## WakeUp
-![WakeUp](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/WakeUp.svg)
+![WakeUp](https://rawgit.com/ps2/minimed_rf/master/docs/WakeUp.svg)
 

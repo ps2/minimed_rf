@@ -26,6 +26,6 @@ File.open('docs/README.md', "w") do |f|
   message_types.each do |message_type|
     class_name = message_type.split('::').last
     f.write("## #{class_name}\n")
-    f.write("![#{class_name}](https://raw.githubusercontent.com/ps2/minimed_rf/master/docs/#{class_name}.svg)\n\n")
+    f.write("![#{class_name}](https://rawgit.com/ps2/minimed_rf/master/docs/#{class_name}.svg)\n\n")
   end
 end
