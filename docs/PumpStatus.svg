@@ -9,29 +9,29 @@
   <title>blockdiag</title>
   <desc>packetdiag {
 colwidth=32
-0-7: packet_type
-8-31: addr
-32-39: message_type
-41-47: sequence
-52-54: trend
-59-63: pump_hour
-66-71: pump_minute
-80-87: pump_year
-92-95: pump_month
-99-103: pump_day
-112-119: bg_h
-120-127: prev_bg_h
-141-151: insulin_remaining
-184-191: sensor_age
-192-199: sensor_remaining
-221-231: active_ins
-238-238: prev_bg_l
-239-239: bg_l
-267-271: sensor_hour
-274-279: sensor_minute
-288-295: sensor_year
-300-303: sensor_month
-307-311: sensor_day
+0-7: packet_type [color = "none"]
+8-31: addr [color = "none"]
+32-39: message_type [color = "none"]
+41-47: sequence [color = "none"]
+52-54: trend [color = "none"]
+59-63: pump_hour [color = "none"]
+66-71: pump_minute [color = "none"]
+80-87: pump_year [color = "none"]
+92-95: pump_month [color = "none"]
+99-103: pump_day [color = "none"]
+112-119: bg_h [color = "none"]
+120-127: prev_bg_h [color = "none"]
+141-151: insulin_remaining [color = "none"]
+184-191: sensor_age [color = "none"]
+192-199: sensor_remaining [color = "none"]
+221-231: active_ins [color = "none"]
+238-238: prev_bg_l [color = "none"]
+239-239: bg_l [color = "none"]
+267-271: sensor_hour [color = "none"]
+274-279: sensor_minute [color = "none"]
+288-295: sensor_year [color = "none"]
+300-303: sensor_month [color = "none"]
+307-311: sensor_day [color = "none"]
 }
 </desc>
   <path d="M 64 48 L 64 80" fill="none" stroke="rgb(0,0,0)" />
@@ -70,146 +70,146 @@ colwidth=32
   <path d="M 808 64 L 808 80" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 48 L 832 80" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="14" x="832" y="42">32</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="64" y="80" />
+  <rect fill="none" height="40" stroke="none" width="192" x="64" y="80" />
   <path d="M 64 80 L 256 80" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 80 L 256 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 120 L 64 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 64 120 L 64 80" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="65" x="160" y="107">packet_type</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="576" x="256" y="80" />
+  <rect fill="none" height="40" stroke="none" width="576" x="256" y="80" />
   <path d="M 256 80 L 832 80" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 80 L 832 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 120 L 256 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 120 L 256 80" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="25" x="544" y="105">addr</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="64" y="120" />
+  <rect fill="none" height="40" stroke="none" width="192" x="64" y="120" />
   <path d="M 64 120 L 256 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 120 L 256 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 160 L 64 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 64 160 L 64 120" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="77" x="160" y="146">message_type</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="168" x="280" y="120" />
+  <rect fill="none" height="40" stroke="none" width="168" x="280" y="120" />
   <path d="M 280 120 L 448 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 120 L 448 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 160 L 280 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 280 160 L 280 120" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="52" x="364" y="147">sequence</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="72" x="544" y="120" />
+  <rect fill="none" height="40" stroke="none" width="72" x="544" y="120" />
   <path d="M 544 120 L 616 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 616 120 L 616 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 616 160 L 544 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 544 160 L 544 120" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="29" x="580" y="145">trend</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="120" x="712" y="120" />
+  <rect fill="none" height="40" stroke="none" width="120" x="712" y="120" />
   <path d="M 712 120 L 832 120" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 120 L 832 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 160 L 712 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 712 160 L 712 120" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="63" x="772" y="147">pump_hour</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="144" x="112" y="160" />
+  <rect fill="none" height="40" stroke="none" width="144" x="112" y="160" />
   <path d="M 112 160 L 256 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 160 L 256 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 200 L 112 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 112 200 L 112 160" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="75" x="184" y="187">pump_minute</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="448" y="160" />
+  <rect fill="none" height="40" stroke="none" width="192" x="448" y="160" />
   <path d="M 448 160 L 640 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 160 L 640 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 200 L 448 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 200 L 448 160" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="544" y="187">pump_year</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="96" x="736" y="160" />
+  <rect fill="none" height="40" stroke="none" width="96" x="736" y="160" />
   <path d="M 736 160 L 832 160" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 160 L 832 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 200 L 736 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 736 200 L 736 160" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="784" y="187">pump_month</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="120" x="136" y="200" />
+  <rect fill="none" height="40" stroke="none" width="120" x="136" y="200" />
   <path d="M 136 200 L 256 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 200 L 256 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 240 L 136 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 136 240 L 136 200" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="57" x="196" y="227">pump_day</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="448" y="200" />
+  <rect fill="none" height="40" stroke="none" width="192" x="448" y="200" />
   <path d="M 448 200 L 640 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 200 L 640 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 240 L 448 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 240 L 448 200" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="27" x="544" y="226">bg_h</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="640" y="200" />
+  <rect fill="none" height="40" stroke="none" width="192" x="640" y="200" />
   <path d="M 640 200 L 832 200" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 200 L 832 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 240 L 640 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 240 L 640 200" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="57" x="736" y="227">prev_bg_h</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="264" x="376" y="240" />
+  <rect fill="none" height="40" stroke="none" width="264" x="376" y="240" />
   <path d="M 376 240 L 640 240" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 240 L 640 280" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 280 L 376 280" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 376 280 L 376 240" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="508" y="266">insulin_remaining</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="640" y="280" />
+  <rect fill="none" height="40" stroke="none" width="192" x="640" y="280" />
   <path d="M 640 280 L 832 280" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 280 L 832 320" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 320 L 640 320" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 320 L 640 280" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="63" x="736" y="306">sensor_age</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="64" y="320" />
+  <rect fill="none" height="40" stroke="none" width="192" x="64" y="320" />
   <path d="M 64 320 L 256 320" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 320 L 256 360" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 360 L 64 360" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 64 360 L 64 320" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="97" x="160" y="346">sensor_remaining</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="64" y="360" />
+  <rect fill="none" height="40" stroke="none" width="192" x="64" y="360" />
   <path d="M 64 360 L 256 360" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 360 L 256 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 400 L 64 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 64 400 L 64 360" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="53" x="160" y="386">active_ins</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="24" x="400" y="360" />
+  <rect fill="none" height="40" stroke="none" width="24" x="400" y="360" />
   <path d="M 400 360 L 424 360" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 424 360 L 424 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 424 400 L 400 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 400 400 L 400 360" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="19" x="412" y="381">pre</text>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="19" x="412" y="393">v ...</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="24" x="424" y="360" />
+  <rect fill="none" height="40" stroke="none" width="24" x="424" y="360" />
   <path d="M 424 360 L 448 360" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 360 L 448 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 400 L 424 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 424 400 L 424 360" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="23" x="436" y="386">bg_l</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="120" x="328" y="400" />
+  <rect fill="none" height="40" stroke="none" width="120" x="328" y="400" />
   <path d="M 328 400 L 448 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 400 L 448 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 440 L 328 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 328 440 L 328 400" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="69" x="388" y="426">sensor_hour</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="144" x="496" y="400" />
+  <rect fill="none" height="40" stroke="none" width="144" x="496" y="400" />
   <path d="M 496 400 L 640 400" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 400 L 640 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 440 L 496 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 496 440 L 496 400" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="81" x="568" y="426">sensor_minute</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="192" x="64" y="440" />
+  <rect fill="none" height="40" stroke="none" width="192" x="64" y="440" />
   <path d="M 64 440 L 256 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 440 L 256 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 256 480 L 64 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 64 480 L 64 440" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="160" y="466">sensor_year</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="96" x="352" y="440" />
+  <rect fill="none" height="40" stroke="none" width="96" x="352" y="440" />
   <path d="M 352 440 L 448 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 440 L 448 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 448 480 L 352 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 352 480 L 352 440" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="78" x="400" y="466">sensor_month</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="120" x="520" y="440" />
+  <rect fill="none" height="40" stroke="none" width="120" x="520" y="440" />
   <path d="M 520 440 L 640 440" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 440 L 640 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 640 480 L 520 480" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 520 480 L 520 440" fill="none" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="63" x="580" y="466">sensor_day</text>
-  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(255,255,255)" width="72" x="760" y="320" />
+  <rect fill="none" height="40" stroke="none" width="72" x="760" y="320" />
   <path d="M 760 320 L 832 320" fill="none" stroke="rgb(0,0,0)" />
   <path d="M 832 320 L 832 360" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
   <path d="M 832 360 L 760 360" fill="none" stroke="rgb(0,0,0)" />

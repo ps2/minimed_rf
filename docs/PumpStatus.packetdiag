@@ -1,26 +1,26 @@
 packetdiag {
 colwidth=32
-0-7: packet_type
-8-31: addr
-32-39: message_type
-41-47: sequence
-52-54: trend
-59-63: pump_hour
-66-71: pump_minute
-80-87: pump_year
-92-95: pump_month
-99-103: pump_day
-112-119: bg_h
-120-127: prev_bg_h
-141-151: insulin_remaining
-184-191: sensor_age
-192-199: sensor_remaining
-221-231: active_ins
-238-238: prev_bg_l
-239-239: bg_l
-267-271: sensor_hour
-274-279: sensor_minute
-288-295: sensor_year
-300-303: sensor_month
-307-311: sensor_day
+0-7: packet_type [color = "none"]
+8-31: addr [color = "none"]
+32-39: message_type [color = "none"]
+41-47: sequence [color = "none"]
+52-54: trend [color = "none"]
+59-63: pump_hour [color = "none"]
+66-71: pump_minute [color = "none"]
+80-87: pump_year [color = "none"]
+92-95: pump_month [color = "none"]
+99-103: pump_day [color = "none"]
+112-119: bg_h [color = "none"]
+120-127: prev_bg_h [color = "none"]
+141-151: insulin_remaining [color = "none"]
+184-191: sensor_age [color = "none"]
+192-199: sensor_remaining [color = "none"]
+221-231: active_ins [color = "none"]
+238-238: prev_bg_l [color = "none"]
+239-239: bg_l [color = "none"]
+267-271: sensor_hour [color = "none"]
+274-279: sensor_minute [color = "none"]
+288-295: sensor_year [color = "none"]
+300-303: sensor_month [color = "none"]
+307-311: sensor_day [color = "none"]
 }
