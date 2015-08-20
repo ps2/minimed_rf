@@ -47,6 +47,20 @@ module MinimedRF
       end
     end
 
+    def packetdiag
+      out = "packetdiag {\ncolwidth=32\n"
+      bits = ""
+      @raw_data.each_byte do |d|
+        bits << "%08b" % d
+      end
+      (0..(bits.length-1)).each do |idx|
+        if bits[idx] == "1"
+          out << "#{idx}-#{idx}: [color = \"#eeeeee\", style = \"0,1\"]\n"
+        end
+      end
+      out << "}\n"
+    end
+
     def valid?
       !@raw_data.nil? &&
       @raw_data.length > 4 &&

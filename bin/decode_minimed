@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 begin
+  require 'base64'
   require 'minimed_rf'
 rescue LoadError
   require 'rubygems'
@@ -31,8 +32,33 @@ def handle_input(input)
   puts packet.to_s
   #puts packet.crc
   #puts packet.computed_crc
-  #puts packet.to_message
 
+  message = packet.to_message
+
+  if message
+    File.open("tmppacket.packetdiag", "w") do |f|
+      f.print packet.packetdiag
+    end
+    `packetdiag -T svg tmppacket.packetdiag`
+
+    mime_type    = "image/svg+xml"
+    encoded_text = Base64.strict_encode64(File.open("tmppacket.svg").read)
+
+    html = <<-ENDOFHTML
+<html>
+  <head>
+  </head>
+  <body>
+    <img src="data:#{mime_type};base64,#{encoded_text}" style="position: absolute; max-width:100%;">
+    <img src="https://rawgit.com/ps2/minimed_rf/master/docs/PumpStatus.svg" style="position:absolute;max-width:100%;">
+  </body>
+</html>
+ENDOFHTML
+
+    File.open("#{input}.html", "w") do |f|
+      f.write(html)
+    end
+  end
 end
 
 if ARGV.length > 0

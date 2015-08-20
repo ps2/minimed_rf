@@ -1,0 +1,7 @@
+packetdiag {
+colwidth=32
+0-7: packet_type [color = "none"]
+8-31: addr [color = "none"]
+32-39: message_type [color = "none"]
+41-47: sequence [color = "none"]
+}
