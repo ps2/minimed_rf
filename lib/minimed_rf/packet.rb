@@ -7,7 +7,9 @@ module MinimedRF
     end
 
     def raw_hex_data
-      @raw_data.unpack('H*').first
+      if @raw_data
+        @raw_data.unpack('H*').first
+      end
     end
 
     def data=(data)

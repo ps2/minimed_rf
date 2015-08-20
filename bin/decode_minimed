@@ -23,9 +23,11 @@ def handle_input(input)
 
   # try decoded
   if !packet.valid?
+    puts packet.raw_hex_data
+    puts "Raw didn't working; trying from already decoded"
     packet = MinimedRF::Packet.from_hex(input)
   end
-  #puts packet.raw_hex_data
+  puts packet.raw_hex_data
   puts packet.to_s
   #puts packet.crc
   #puts packet.computed_crc
