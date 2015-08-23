@@ -62,7 +62,7 @@ ENDOFHTML
 end
 
 if ARGV.length > 0
-  handle_input(ARGV.first)
+  handle_input(ARGV.join(""))
 else
   while line = STDIN.gets
     handle_input(line.chomp)
