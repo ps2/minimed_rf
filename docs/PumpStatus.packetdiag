@@ -13,6 +13,7 @@ colwidth=32
 112-119: bg_h [color = "none"]
 120-127: prev_bg_h [color = "none"]
 141-151: insulin_remaining [color = "none"]
+156-159: batt [color = "none"]
 184-191: sensor_age [color = "none"]
 192-199: sensor_remaining [color = "none"]
 221-231: active_ins [color = "none"]
