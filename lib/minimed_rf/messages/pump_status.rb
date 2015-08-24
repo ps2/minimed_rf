@@ -15,7 +15,7 @@ module MinimedRF
         prev_bg_h: [80, 8],
         #field_x3: [94,1],
         insulin_remaining: [101,11],
-        #field_x5: [116,4],
+        batt: [116,4],
         #field_x6: [126,2],
         #field_x7: [136,6],
         sensor_age: [144,8],
@@ -115,6 +115,10 @@ module MinimedRF
       b(:insulin_remaining) / 10.0
     end
 
+    def battery_pct
+      (b(:batt) / 4.0 * 100).to_i
+    end
+
     def to_s
       val = "PumpStatus: ##{sequence} #{pump_timestamp} #{sensor_timestamp} - "
 
@@ -139,7 +143,7 @@ module MinimedRF
         val << " Trend=#{trend}"
       end
 
-      val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U"
+      val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U Battery=#{battery_pct}%"
 
       if active_insulin > 0
         val << " ActiveInsulin=#{active_insulin}"
