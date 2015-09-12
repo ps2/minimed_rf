@@ -7,7 +7,7 @@ module MinimedRF
         trend: [12,3],
         pump_hour: [19,5],
         pump_minute: [26,6],
-        #field_x2: [34,6],
+        pump_second: [34,6],
         pump_year: [40,8],
         pump_month: [52,4],
         pump_day: [59,5],
@@ -20,8 +20,8 @@ module MinimedRF
         #field_x7: [136,6],
         sensor_age: [144,8],
         sensor_remaining: [152,8],
-        #field_x10: [160,8],
-        #field_x11: [168,8],
+        next_cal_hour: [160,8],  # ff at sensor end, 00 at sensor off
+        next_cal_minute: [168,8],
         active_ins: [181, 11],
         prev_bg_l: [198, 1],
         bg_l: [199, 1],
@@ -36,7 +36,7 @@ module MinimedRF
 
     def pump_timestamp
       if b(:pump_year) > 0
-        Time.new(b(:pump_year) + 2000, b(:pump_month), b(:pump_day), b(:pump_hour), b(:pump_minute))
+        Time.new(b(:pump_year) + 2000, b(:pump_month), b(:pump_day), b(:pump_hour), b(:pump_minute), b(:pump_second))
       end
     end
 
