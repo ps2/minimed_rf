@@ -48,4 +48,10 @@ describe MinimedRF::PumpStatus do
     expect(message.active_insulin).to be_within(0.0001).of(0.975)
   end
 
+  it "should decode battery voltage" do
+    hex_data = "f94108200c0f090e00454600022a040205f8810f0b0c000002000104081e000f090e0000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.battery_pct).to eq 100
+  end
+
 end
