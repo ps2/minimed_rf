@@ -11,7 +11,7 @@ describe MinimedRF::PumpStatus do
     expect(message.glucose).to eq 213
     expect(message.previous_glucose).to eq 218
     expect(message.sensor_timestamp).to eq Time.parse('2014-07-24 04:11:00')
-    expect(message.pump_timestamp).to eq Time.parse('2014-07-24 04:13:00')
+    expect(message.pump_timestamp).to eq Time.parse('2014-07-24 04:13:36')
   end
 
   it "should handle weak signal messages" do
