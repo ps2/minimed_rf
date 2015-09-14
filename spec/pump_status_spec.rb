@@ -54,4 +54,11 @@ describe MinimedRF::PumpStatus do
     expect(message.battery_pct).to eq 100
   end
 
+  it "should decode battery voltage2" do
+    hex_data = "8341083b000f090e00050500044f040308adff00ffff0000000000b1083a000f090e0000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.battery_pct).to eq 100
+  end
+
+
 end
