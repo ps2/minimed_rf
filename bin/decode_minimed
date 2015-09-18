@@ -24,8 +24,8 @@ def handle_input(input)
 
   # try decoded
   if !packet.valid?
-    puts packet.raw_hex_data
-    puts "Raw didn't working; trying from already decoded"
+    puts "data: #{packet.hex_data}"
+    puts "Raw didn't work; trying from already decoded"
     packet = MinimedRF::Packet.from_hex(input)
   end
   puts packet.raw_hex_data
