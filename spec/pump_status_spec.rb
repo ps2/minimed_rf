@@ -48,4 +48,22 @@ describe MinimedRF::PumpStatus do
     expect(message.active_insulin).to be_within(0.0001).of(0.975)
   end
 
+  it "should decode battery full" do
+    hex_data = "f94108200c0f090e00454600022a040205f8810f0b0c000002000104081e000f090e0000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.battery_pct).to eq 100
+  end
+
+  it "should decode battery full2" do
+    hex_data = "0241160e000f09110005050001d60402060aff00ffff0000000000b1160d000f09110000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.battery_pct).to eq 100
+  end
+
+  it "should decode battery 75%" do
+    hex_data = "fb411609310f09110038360001f00302060f4749050d000e010001041609000f09110000"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.battery_pct).to eq 75
+  end
+
 end
