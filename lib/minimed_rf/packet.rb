@@ -36,21 +36,6 @@ module MinimedRF
       @crc = data.getbyte(-1)
       @raw_data = data
 
-      @table = [0]
-      msbit = 0x80
-      polynomial = 0x9b
-      t = msbit
-      i = 1
-      while (i < 256)
-        t = ((t << 1) & 0xff) ^ ((t & msbit > 0) ? polynomial : 0)
-        t = t & 0xff
-        j = 0
-        while (j < i)
-          @table[i+j] = (@table[j] ^ t) & 0xff
-          j = (j + 1) & 0xff
-        end
-        i = i * 2
-      end
     end
 
     def packetdiag
@@ -78,11 +63,7 @@ module MinimedRF
     end
 
     def computed_crc
-      running_crc = 0
-      raw_data.bytes[0..-2].each do |b|
-        running_crc = @table[(running_crc ^ b) & 0xff]
-      end
-      running_crc
+      CRC8::compute(raw_data.bytes[0..-2])
     end
 
     def encode
