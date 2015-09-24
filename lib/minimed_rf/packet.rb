@@ -12,6 +12,12 @@ module MinimedRF
       end
     end
 
+    def hex_data
+      if @data
+        @data.unpack('H*').first
+      end
+    end
+
     def data=(data)
       # Address type (first byte of packet):
       # 0xa2 (162) = mysentry
