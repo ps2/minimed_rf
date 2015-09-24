@@ -16,8 +16,8 @@ module MinimedRF
         #field_x3: [94,1],
         insulin_remaining: [101,11],
         batt: [116,4],
-        #field_x6: [126,2],
-        #field_x7: [136,6],
+        reservoir_days_remaining: [120, 8],  # "Days" + 1
+        reservoir_minutes_remaining: [128, 16],  # "Minutes" only correlate with pump display during final 24 hours
         sensor_age: [144,8],
         sensor_remaining: [152,8],
         next_cal_hour: [160,8],  # ff at sensor end, 00 at sensor off
