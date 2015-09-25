@@ -8,6 +8,10 @@ module MinimedRF
         state: [4,4],
         address: [16,24],
         version: [40,8],
+        isig_adj: [56,8],
+        sequence: [64,4],
+        repeat: [68,4],
+        isig: [72,16],
       }
     end
 
@@ -36,8 +40,24 @@ module MinimedRF
       b(:address)
     end
 
+    def isig_adj
+      b(:isig_adj)
+    end
+
+    def isig
+      b(:isig)
+    end
+
+    def sequence
+      b(:sequence)
+    end
+
+    def repeat
+      b(:repeat)
+    end
+
     def to_s
-      "Sensor: #{state} #{device_address} v#{version}"
+      "Sensor: #{state} #{device_address} v#{version} ##{sequence}.#{repeat} adjust: #{isig_adj} isig: #{isig}"
     end
   end
 end
