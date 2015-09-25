@@ -1,6 +1,6 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :body, :crc, :raw_data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
+    attr_accessor :address, :raw_data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
 
     def initialize
       coding_errors = 0
@@ -23,6 +23,7 @@ module MinimedRF
       # 0xa2 (162) = mysentry
       # 0xa5 (165) = glucose meter (bayer contour)
       # 0xa7 (167) = pump
+      # 0xa8 (168) = sensor test
       # 0xaa (170) = sensor
       # 0xab (171) = sensor2
 
@@ -32,8 +33,6 @@ module MinimedRF
 
       @message_type = data.getbyte(4)
 
-      @body = data.byteslice(5..-2)
-      @crc = data.getbyte(-1)
       @raw_data = data
 
     end
@@ -62,8 +61,22 @@ module MinimedRF
       @channel || '?'
     end
 
+    def crc
+      case packet_type
+      when 0xa8, 0xaa, 0xab
+        (raw_data.bytes[-2] << 8) + raw_data.bytes[-1]
+      else
+        raw_data.bytes[-1]
+      end
+    end
+
     def computed_crc
-      CRC8::compute(raw_data.bytes[0..-2])
+      case packet_type
+      when 0xa8, 0xaa, 0xab
+        CRC16::compute(raw_data.bytes[0..-3])
+      else
+        CRC8::compute(raw_data.bytes[0..-2])
+      end
     end
 
     def encode
@@ -88,9 +101,9 @@ module MinimedRF
     def to_s
       msg = to_message
       if msg
-        "#{"%02x" % @packet_type} #{address} #{msg}"
+        msg.to_s
       elsif valid?
-        "#{"%02x" % @packet_type} #{address} #{"%02x" % message_type} #{body.unpack("H*").first} #{"%02x" % crc} "
+        data.unpack("H*")
       elsif raw_data
         "invalid: #{raw_data.unpack("H*").first} expected_crc=#{"%02x" % computed_crc}"
       else
@@ -107,7 +120,8 @@ module MinimedRF
           end
         when 0xa5
           MinimedRF::Meter.new(raw_data[4..-2])
-        when 0xa8
+        when 0xa8, 0xaa, 0xab
+          MinimedRF::Sensor.new(raw_data)
           # Sensor
         end
       end
