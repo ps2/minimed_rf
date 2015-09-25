@@ -2,10 +2,19 @@
 module MinimedRF
 
   AlertCodes = {
+    0x04 => :no_delivery,
     0x33 => :max_hourly_bolus,
+    0x52 => :low_reservoir,
+    0x65 => :high_glucose,
+    0x66 => :low_glucose,
+    0x68 => :meter_bg_now,
+    0x69 => :meter_bg_soon,
+    0x6a => :calibration_error,
+    0x6b => :sensor_end,
+    0x70 => :weak_signal,
+    0x71 => :lost_sensor,
     0x72 => :high_predicted,
     0x73 => :low_predicted,
-    0x68 => :meter_bg_now,
   }
 
   class Alert < Message
@@ -16,7 +25,13 @@ module MinimedRF
     def self.bit_blocks
       {
         sequence: [0,8],
-        alert_type: [8,8]
+        alert_type: [8,8],
+        alert_hour: [19,5],
+        alert_minute: [26,6],
+        alert_second: [34,6],
+        alert_year: [40,8],
+        alert_month: [52,4],
+        alert_day: [59,5],
       }
     end
 
