@@ -1,14 +1,21 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :raw_data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
+    attr_accessor :address, :data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
 
     def initialize
       coding_errors = 0
     end
 
+    def raw_data
+      if @raw_data.nil? && !@data.nil?
+        @raw_data = encode
+      end
+      @raw_data
+    end
+
     def raw_hex_data
-      if @raw_data
-        @raw_data.unpack('H*').first
+      if raw_data
+        raw_data.unpack('H*').first
       end
     end
 
@@ -33,14 +40,14 @@ module MinimedRF
 
       @message_type = data.getbyte(4)
 
-      @raw_data = data
+      @data = data
 
     end
 
     def packetdiag
       out = "packetdiag {\ncolwidth=32\n"
       bits = ""
-      @raw_data.each_byte do |d|
+      @data.each_byte do |d|
         bits << "%08b" % d
       end
       (0..(bits.length-1)).each do |idx|
@@ -52,8 +59,8 @@ module MinimedRF
     end
 
     def valid?
-      !@raw_data.nil? &&
-      @raw_data.length > 4 &&
+      !@data.nil? &&
+      @data.length > 4 &&
       (crc.nil? || crc == computed_crc)
     end
 
@@ -64,24 +71,24 @@ module MinimedRF
     def crc
       case packet_type
       when 0xa8, 0xaa, 0xab
-        (raw_data.bytes[-2] << 8) + raw_data.bytes[-1]
+        (data.bytes[-2] << 8) + data.bytes[-1]
       else
-        raw_data.bytes[-1]
+        data.bytes[-1]
       end
     end
 
     def computed_crc
       case packet_type
       when 0xa8, 0xaa, 0xab
-        CRC16::compute(raw_data.bytes[0..-3])
+        CRC16::compute(data.bytes[0..-3])
       else
-        CRC8::compute(raw_data.bytes[0..-2])
+        CRC8::compute(data.bytes[0..-2])
       end
     end
 
     def encode
       codes = []
-      @raw_data.bytes.each { |b|
+      @data.bytes.each { |b|
         codes << CODES[(b >> 4)]
         codes << CODES[b & 0xf]
       }
@@ -104,8 +111,8 @@ module MinimedRF
         msg.to_s
       elsif valid?
         data.unpack("H*")
-      elsif raw_data
-        "invalid: #{raw_data.unpack("H*").first} expected_crc=#{"%02x" % computed_crc}"
+      elsif data
+        "invalid: #{data.unpack("H*").first} expected_crc=#{"%02x" % computed_crc}"
       else
         "invalid: encoding errors"
       end
@@ -116,12 +123,12 @@ module MinimedRF
         case packet_type
         when 0xa2,0xa7
           if MessageTypeMap.include?(message_type)
-            MessageTypeMap[message_type].new(raw_data[5..-2])
+            MessageTypeMap[message_type].new(data[5..-2])
           end
         when 0xa5
-          MinimedRF::Meter.new(raw_data[4..-2])
+          MinimedRF::Meter.new(data[4..-2])
         when 0xa8, 0xaa, 0xab
-          MinimedRF::Sensor.new(raw_data)
+          MinimedRF::Sensor.new(data)
           # Sensor
         end
       end
