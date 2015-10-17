@@ -139,15 +139,16 @@ module MinimedRF
         val << "Glucose=#{glucose} PreviousGlucose=#{previous_glucose}"
       end
 
+      val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U Battery=#{battery_pct}%"
+
+      if active_insulin > 0
+        val << " ActiveInsulin=#{active_insulin.round(3)}"
+      end
+      
       unless trend.empty?
         val << " Trend=#{trend}"
       end
 
-      val << " SensorAge=#{sensor_age}hrs- SensorRemaining=#{sensor_remaining} InsulinRemaining=#{insulin_remaining}U Battery=#{battery_pct}%"
-
-      if active_insulin > 0
-        val << " ActiveInsulin=#{active_insulin}"
-      end
       val
     end
   end
