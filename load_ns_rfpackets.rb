@@ -15,7 +15,13 @@ Dotenv.load
 
 ns_url = ENV["NIGHTSCOUT_URL"] or abort("Please set NIGHTSCOUT_URL environment variable")
 
-uri = URI.parse(ns_url + "/api/v1/entries.json?find[type]=rfpacket&count=100")
+count = (ARGV[0] || 100).to_i
+
+if count == 0
+  abort("invalid count")
+end
+
+uri = URI.parse(ns_url + "/api/v1/entries.json?find[type]=rfpacket&count=#{count}")
 
 packets = JSON.parse(uri.read)
 
@@ -28,7 +34,7 @@ packets.each do |p|
 
   puts "#{p["dateString"]} - #{p["rfpacket"]}"
   m = packet.to_message
-  puts m
+  puts "                           " + m.to_s
   #v = m.b(:x1)
   #puts "#{m.to_s} %02x %06b" % [v,v]
 

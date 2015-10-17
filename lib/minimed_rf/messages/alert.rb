@@ -24,7 +24,7 @@ module MinimedRF
 
     def self.bit_blocks
       {
-        sequence: [0,8],
+        sequence: [1,7],
         alert_type: [8,8],
         alert_hour: [19,5],
         alert_minute: [26,6],
@@ -43,6 +43,12 @@ module MinimedRF
       AlertCodes[b(:alert_type)]
     end
 
+    def timestamp
+      if b(:alert_year) > 0
+        Time.new(b(:alert_year) + 2000, b(:alert_month), b(:alert_day), b(:alert_hour), b(:alert_minute), b(:alert_second))
+      end
+    end
+
     def alert_type_str
       case alert_type
       when :max_hourly_bolus
@@ -57,7 +63,7 @@ module MinimedRF
     end
 
     def to_s
-      "Alert: ##{sequence} \"#{alert_type_str}\""
+      "Alert: #{timestamp} ##{sequence} \"#{alert_type_str}\""
     end
   end
 end
