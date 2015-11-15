@@ -14,6 +14,10 @@ module MinimedRF
       @data = data
     end
 
+    def crc_ok?
+      CRC16::compute(data.bytes[0..-3]) == data[-2..-1].unpack('n').first
+    end
+
     def decode(date_range = nil)
 
       entries = []
