@@ -100,7 +100,7 @@ module MinimedRF
       end
 
       def insulin_sensitivity
-        ((d(4) & 0x64) << 2) + d(11)
+        d(11)
       end
 
       def timestamp

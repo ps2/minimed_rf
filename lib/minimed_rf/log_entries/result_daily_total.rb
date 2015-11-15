@@ -33,7 +33,7 @@ module MinimedRF
       end
 
       def length
-        62
+        10
       end
 
       def to_s

@@ -14,6 +14,14 @@ module MinimedRF
         @data.unpack("H*").first
       end
 
+      def parse_date_2byte(offset)
+        day = d(offset) & 0x1f
+        month = ((d(offset) & 0xe0) >> 4) + ((d(offset+1) & 0x80) >> 7)
+        year = 2000 + (d(offset+1) & 0b1111111)
+        [year, month, day, 0, 0, 0]
+      end
+
+
       def parse_date(offset)
         sec = d(offset) & 0x3f
         min = d(offset+1) & 0x3f
