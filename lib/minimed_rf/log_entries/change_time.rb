@@ -16,7 +16,7 @@ module MinimedRF
       end
 
       def to_s
-        "ChangeTime #{timestamp_str} #{data_str}" # TODO: decode new time
+        "ChangeTime #{timestamp_str}" # TODO: decode new time
       end
 
       def timestamp

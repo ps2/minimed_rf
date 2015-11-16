@@ -1,17 +1,9 @@
 require 'minimed_rf'
+require 'minimed_rf/string_utils'
 
 namespace :ios do
   desc "Generate list of history types"
   task :history_types do
-    class String
-      def underscore
-        self.gsub(/::/, '/').
-        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-        gsub(/([a-z\d])([A-Z])/,'\1_\2').
-        tr("-", "_").
-        downcase
-      end
-    end
 
     MinimedRF::PumpEvents.constants.each do |event_class|
       klazz = MinimedRF::PumpEvents.const_get(event_class)
