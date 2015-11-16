@@ -8,3 +8,5 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 task :default => :spec
+
+Dir.glob('tasks/*.rake').each { |r| import r }

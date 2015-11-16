@@ -5,9 +5,9 @@ module MinimedRF
 
     def initialize(data)
       @registry = {}
-      PumpEvents.constants.each do |event_class|
-        klazz = PumpEvents.const_get(event_class)
-        next if klazz == PumpEvents::Base
+      MinimedRF::PumpEvents.constants.each do |event_class|
+        klazz = MinimedRF::PumpEvents.const_get(event_class)
+        next if klazz == MinimedRF::PumpEvents::Base
         @registry[klazz.event_type_code] = klazz
       end
 
