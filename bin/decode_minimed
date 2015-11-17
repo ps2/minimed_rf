@@ -14,6 +14,16 @@ def handle_input(input)
   # remove spaces
   input = input.gsub(/\W/,'')
 
+  if input.length == 2048
+    history_page = MinimedRF::HistoryPage.new([input].pack('H*'))
+    if history_page.crc_ok?
+      entries = history_page.decode(nil, true)
+    else
+      puts "Invalid crc16 for history page."
+    end
+    exit
+  end
+
   # Look for second byte 00, which is inserted by RF Studio as length field?
   if input[2,2] == "00"
     input.slice!(2,2)

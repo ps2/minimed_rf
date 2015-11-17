@@ -23,7 +23,7 @@ module MinimedRF
       CRC16::compute(data.bytes[0..-3]) == data[-2..-1].unpack('n').first
     end
 
-    def decode(date_range = nil)
+    def decode(date_range = nil, print = false)
 
       entries = []
       skipped = ""
@@ -32,10 +32,14 @@ module MinimedRF
         event = match(date_range)
         if event
           unless skipped.empty?
-            puts "Skipped: " + skipped
+            if print
+              puts "Skipped: " + skipped
+            end
             skipped = ""
           end
-          puts "#{event}"
+          if print
+            puts "#{event}"
+          end
           entries << event
           @data = data[(event.length)..-1]
         else
@@ -44,10 +48,9 @@ module MinimedRF
         end
       end
 
-      unless skipped.empty?
+      unless skipped.empty? || !print
         puts "Skipped: " + skipped
       end
-      print "\n"
 
       return entries
     end

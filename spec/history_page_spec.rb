@@ -37,6 +37,6 @@ describe MinimedRF::HistoryPage do
     expect(history_page.crc_ok?).to eq true
 
     entries = history_page.decode
-    expect(entries.length).to eq 51
+    expect(entries.length).to eq 27
   end
 end
