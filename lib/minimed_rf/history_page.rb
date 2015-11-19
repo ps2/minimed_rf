@@ -13,10 +13,10 @@ module MinimedRF
       rval
     end
 
-    def initialize(data, pump = nil)
+    def initialize(data, pump_model = nil)
       @registry = self.class.type_registry
       @data = data
-      @pump = pump
+      @pump_model = pump_model
     end
 
     def crc_ok?

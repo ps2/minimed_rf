@@ -1,10 +1,10 @@
 module MinimedRF
   module PumpEvents
     class Base
-      def initialize(data, pump=nil)
+      def initialize(data, pump_model=nil)
         @data = data
         @data = @data.byteslice(0,length)
-        @pump = pump
+        @pump_model = pump_model
       end
 
       def d(i)
