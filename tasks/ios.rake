@@ -26,8 +26,8 @@ namespace :ios do
     MinimedRF::PumpEvents.constants.each do |event_class|
       klazz = MinimedRF::PumpEvents.const_get(event_class)
       next if klazz == MinimedRF::PumpEvents::Base
-      class_name = "PHR" + klazz.to_s.split("::").last
-      code = "0x%02x" % klazz.event_type_code
+      class_name = "PHE" + klazz.to_s.split("::").last
+      event_type_code = "0x%02x" % klazz.event_type_code
       length = klazz.new("0000").length
       File.open(output_dir + "/" + class_name + ".h", "w+") do |f|
         f.write(ERB.new(template_h).result(binding))
