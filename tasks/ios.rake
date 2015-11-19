@@ -29,11 +29,17 @@ namespace :ios do
       class_name = "PHE" + klazz.to_s.split("::").last
       event_type_code = "0x%02x" % klazz.event_type_code
       length = klazz.new("0000").length
-      File.open(output_dir + "/" + class_name + ".h", "w+") do |f|
-        f.write(ERB.new(template_h).result(binding))
+      h_file = output_dir + "/" + class_name + ".h"
+      if !File.exists?(h_file)
+        File.open(h_file, "w+") do |f|
+          f.write(ERB.new(template_h).result(binding))
+        end
       end
-      File.open(output_dir + "/" + class_name + ".m", "w+") do |f|
-        f.write(ERB.new(template_m).result(binding))
+      m_file = output_dir + "/" + class_name + ".m"
+      if !File.exists?(m_file)
+        File.open(m_file, "w+") do |f|
+          f.write(ERB.new(template_m).result(binding))
+        end
       end
     end
   end
