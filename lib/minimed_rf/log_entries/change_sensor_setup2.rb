@@ -23,7 +23,7 @@ module MinimedRF
       end
 
       def length
-        if @pump_model == "551"  # 530g = 551, added fields for low suspend
+        if @pump_model.has_low_suspend
           41
         else
           37

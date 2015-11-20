@@ -16,11 +16,11 @@ module MinimedRF
       end
 
       def length
-        d(1)
+        [2, d(1)].max
       end
 
       def to_s
-        "UnabsorbedInsulin #{records.map {|r| "(#{r})"}.join(" ")}"
+        "UnabsorbedInsulin #{records.length} entries, #{records.map(&:amount).inject {|sum,amount| sum + amount}}U total"
       end
 
       def records
@@ -42,6 +42,12 @@ module MinimedRF
 
       def valid_for(date_range)
         num_records > 0 && num_records < 100
+      end
+
+      def as_json
+        super.merge({
+          data: records.map{|r| {amount: r.amount, age: r.age}}
+        })
       end
 
     end

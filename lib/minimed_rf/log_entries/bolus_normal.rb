@@ -22,12 +22,18 @@ module MinimedRF
   module PumpEvents
     class BolusNormal < Base
 
+      attr_accessor :unabsorbed_insulin
+
       def self.event_type_code
         0x01
       end
 
       def length
-        13
+        if @pump_model.records_unabsorbed_insulin_on_bolus
+          13
+        else
+          9
+        end
       end
 
       def insulin_decode(a, b)
@@ -60,6 +66,18 @@ module MinimedRF
 
       def valid_for(date_range)
         super && amount < 30 && programmed_amount < 30
+      end
+
+      def as_json
+        json = super.merge({
+          amount: amount,
+          programmed_amount: programmed_amount,
+          unabsorbed_insulin_total: unabsorbed_insulin_total,
+        })
+        if !unabsorbed_insulin.nil?
+          json[:unabsorbed_insulin_entries] = unabsorbed_insulin.as_json
+        end
+        json
       end
 
     end

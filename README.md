@@ -92,3 +92,7 @@ ruby -I lib bin/decode_minimed <packetdata>
 ruby -I lib bin/decode_minimed ab29595959655743a5d31c7254ec4b54e55a54b555d0dd0e5555716aa563571566c9ac7258e565574555d1c55555555568bc7256c55554e55a54b55555556c55
 a2 597055 PumpStatus: #101 2014-08-11 18:14:00 -0500 - Glucose=154 PreviousGlucose=156 ActiveInsulin=1.975
 ```
+
+## Thanks
+
+Thanks to @bewest and @loudnate and others who have provided many insights into the Minimed protocols. Much of the pump-specific knowledge has been figured out by @bewest in his [decoding-carelink](https://github.com/bewest/decoding-carelink) repository.

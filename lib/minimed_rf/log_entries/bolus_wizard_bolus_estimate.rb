@@ -44,7 +44,7 @@
 
 module MinimedRF
   module PumpEvents
-    class BolusWizard < Base
+    class BolusWizardBolusEstimate < Base
 
       def self.event_type_code
         0x5b
@@ -109,6 +109,21 @@ module MinimedRF
 
       def carb_ratio
         ((d(9) & 0x7) << 8) + d(10) / 10.0
+      end
+
+      def as_json
+        super.merge({
+          bg: blood_glucose,
+          bg_target_high: bg_target_high,
+          correction_estimate: correction_estimate,
+          carb_input: carbohydrates,
+          unabsorbed_insulin_total: unabsorbed_insulin_total,
+          bolus_estimate: bolus_estimate,
+          carb_ratio: carb_ratio,
+          food_estimate: food_estimate,
+          bg_target_low: bg_target_low,
+          sensitivity: insulin_sensitivity
+        })
       end
 
     end

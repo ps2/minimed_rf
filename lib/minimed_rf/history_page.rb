@@ -13,7 +13,7 @@ module MinimedRF
       rval
     end
 
-    def initialize(data, pump_model = nil)
+    def initialize(data, pump_model = Model551.new)
       @registry = self.class.type_registry
       @data = data
       @pump_model = pump_model
@@ -27,8 +27,9 @@ module MinimedRF
 
       entries = []
       skipped = ""
+      unabsorbed_insulin_record = nil
 
-      while (data.size > 0) do
+      while (data && data.size > 0) do
         event = match(date_range)
         if event
           unless skipped.empty?
@@ -40,7 +41,15 @@ module MinimedRF
           if print
             puts "#{event}"
           end
-          entries << event
+          if event.class == PumpEvents::BolusNormal && !unabsorbed_insulin_record.nil?
+            event.unabsorbed_insulin = unabsorbed_insulin_record
+            unabsorbed_insulin_record = nil
+          end
+          if event.class == PumpEvents::UnabsorbedInsulin
+            unabsorbed_insulin_record = event
+          else
+            entries << event
+          end
           @data = data[(event.length)..-1]
         else
           skipped << sprintf("%02X",data.getbyte(0))
@@ -59,7 +68,7 @@ module MinimedRF
       type = data.getbyte(0)
       klazz = @registry[type]
       if klazz
-        event = klazz.new(data, @pump)
+        event = klazz.new(data, @pump_model)
         return event if date_range.nil? || event.valid_for(date_range)
       end
     end

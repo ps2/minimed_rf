@@ -1,12 +1,8 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'base64'
-  require 'minimed_rf'
-rescue LoadError
-  require 'rubygems'
-  require 'minimed_rf'
-end
+require 'optparse'
+require 'base64'
+require 'minimed_rf'
 
 def handle_input(input)
   return if input.length < 6 || input[0] == "#"
@@ -65,6 +61,20 @@ ENDOFHTML
       f.write(html)
     end
   end
+end
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-f", "--file FILE", "Read binary data directly from file") do |v|
+    options[:file] = file
+  end
+end.parse!
+
+if options[:file]
+  handle_input(File.read(options[:file]))
+  exit
 end
 
 if ARGV.length > 0
