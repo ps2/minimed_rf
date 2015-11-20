@@ -11,7 +11,7 @@ module MinimedRF
         0x57
       end
 
-      def length
+      def bytesize
         7
       end
 

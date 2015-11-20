@@ -50,10 +50,10 @@ module MinimedRF
           else
             entries << event
           end
-          @data = data[(event.length)..-1]
+          @data = @data.byteslice((event.bytesize)..-1)
         else
-          skipped << sprintf("%02X",data.getbyte(0))
-          @data = data[1..-1]
+          skipped << "%02x" % data.getbyte(0)
+          @data = @data.byteslice(1..-1)
         end
       end
 
@@ -69,7 +69,7 @@ module MinimedRF
       klazz = @registry[type]
       if klazz
         event = klazz.new(data, @pump_model)
-        if data.length < event.length
+        if data.bytesize < event.bytesize
           return nil
         end
         return event if date_range.nil? || event.valid_for(date_range)

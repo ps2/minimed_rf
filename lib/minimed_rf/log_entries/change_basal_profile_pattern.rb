@@ -9,7 +9,7 @@ module MinimedRF
         0x08
       end
 
-      def length
+      def bytesize
         152
       end
 

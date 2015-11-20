@@ -38,6 +38,12 @@ describe MinimedRF::HistoryPage do
 
     entries = history_page.decode
     expect(entries.length).to eq 27
+
+    bolus = entries[24]
+    expect(bolus.amount).to eq 0.1
+    expect(bolus.programmed_amount).to eq 0.1
+    expect(bolus.duration).to eq 0
+    expect(bolus.type).to eq "normal"
   end
 
   it "should decode 522 data" do
@@ -66,6 +72,13 @@ describe MinimedRF::HistoryPage do
     expect(bw.bolus_estimate).to eq 4.3
     expect(bw.carb_ratio).to eq 6
     expect(bw.food_estimate).to eq 4.3
+
+    # square bolus
+    bolus = entries[9]
+    expect(bolus.amount).to eq 3.5
+    expect(bolus.programmed_amount).to eq 3.5
+    expect(bolus.duration).to eq 240
+    expect(bolus.type).to eq "square"
 
   end
 end

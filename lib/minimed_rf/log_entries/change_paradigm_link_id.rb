@@ -8,7 +8,7 @@ module MinimedRF
         0x3c
       end
 
-      def length
+      def bytesize
         21
       end
 

@@ -45,7 +45,11 @@ module MinimedRF
 
   class Model740 < Model540; end
 
-  class Model551 < Model540; end
+  class Model551 < Model540
+    def has_low_suspend
+      true
+    end
+  end
 
   class Model751 < Model551; end
 

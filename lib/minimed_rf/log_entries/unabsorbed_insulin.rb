@@ -15,12 +15,11 @@ module MinimedRF
         0x5c
       end
 
-      def length
+      def bytesize
         [2, d(1)].max
       end
 
       def to_s
-        return "UnabsorbedInsulin: Invalid" if @data.length < length
         "UnabsorbedInsulin #{records.length} entries, #{records.map(&:amount).inject {|sum,amount| sum + amount}}U total"
       end
 
@@ -32,7 +31,7 @@ module MinimedRF
 
       def record_for_idx(idx)
         record = Record.new
-        return record if @data.length < length
+        return record if @data.bytesize < bytesize
         record.amount = d(2 + idx * 3) / 40.0
         record.age = d(3 + idx * 3) + ((d(4 + idx * 3) & 0b110000) << 4)
         record

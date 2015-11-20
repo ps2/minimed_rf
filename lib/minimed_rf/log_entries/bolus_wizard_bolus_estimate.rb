@@ -10,13 +10,13 @@ module MinimedRF
       def initialize(data, pump_model=nil)
         super(data, pump_model)
 
-        return if @data.length < length
+        return if @data.bytesize < bytesize
 
         if @pump_model.larger
           @carbohydrates = ((d(8) & 0xc) << 6) + d(7)
           @blood_glucose = ((d(8) & 0x3) << 8) + d(1)
           @food_estimate = insulin_decode(d(14), d(15))
-          @correction_estimate = (((d(16) & 0x38) << 5) + d(13)) / 40.0
+          @correction_estimate = (((d(16) & 0b111000) << 5) + d(13)) / 40.0
           @bolus_estimate = insulin_decode(d(19), d(20))
           @unabsorbed_insulin_total = insulin_decode(d(17), d(18))
           @bg_target_low = d(12)
@@ -33,7 +33,7 @@ module MinimedRF
           @bolus_estimate = d(18)/10.0
           @food_estimate = d(13)/10.0
           @unabsorbed_insulin_total = d(16)/10.0
-          @correction_estimate = (d(14) << 8) + d(12)
+          @correction_estimate = ((d(14) << 8) + d(12)) / 10.0
         end
       end
 
@@ -41,7 +41,7 @@ module MinimedRF
         0x5b
       end
 
-      def length
+      def bytesize
         if @pump_model.larger
           22
         else

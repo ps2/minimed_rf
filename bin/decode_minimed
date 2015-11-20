@@ -5,12 +5,12 @@ require 'base64'
 require 'minimed_rf'
 
 def handle_input(input)
-  return if input.length < 6 || input[0] == "#"
+  return if input.bytesize < 6 || input[0] == "#"
 
   # remove spaces
   input = input.gsub(/\W/,'')
 
-  if input.length == 2048
+  if input.bytesize == 2048
     history_page = MinimedRF::HistoryPage.new([input].pack('H*'))
     if history_page.crc_ok?
       entries = history_page.decode(nil, true)

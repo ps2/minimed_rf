@@ -10,7 +10,7 @@ module MinimedRF
         0x6d
       end
 
-      def length
+      def bytesize
         44
       end
 

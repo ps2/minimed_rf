@@ -60,7 +60,7 @@ module MinimedRF
 
     def valid?
       !@data.nil? &&
-      @data.length > 4 &&
+      @data.bytesize > 4 &&
       (crc.nil? || crc == computed_crc)
     end
 

@@ -22,7 +22,7 @@ module MinimedRF
         0x5a
       end
 
-      def length
+      def bytesize
         144
       end
 

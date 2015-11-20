@@ -18,7 +18,7 @@ module MinimedRF
         0x0b
       end
 
-      def length
+      def bytesize
         8
       end
 
@@ -29,15 +29,21 @@ module MinimedRF
 
       def alarm_types
         {
-          104 => "Meter BG Now (104)",
-          105 => "Sensor Alarm (105)",
-          114 => "High Glucose Predicted (114)",
-          115 => "Low Glucose Predicted (115)"
+          101 => "High Glucose",
+          102 => "Low Glucose",
+          104 => "Meter BG Now",
+          105 => "Sensor Alarm",
+          106 => "Calibration Error",
+          107 => "Sensor End",
+          112 => "Weak Signal",
+          113 => "Lost Sensor",
+          114 => "High Glucose Predicted",
+          115 => "Low Glucose Predicted"
         }
       end
 
       def alarm_type_str
-        alarm_types[alarm_type]
+        alarm_types[alarm_type] || alarm_type.to_s
       end
 
       def alarm_type
@@ -54,6 +60,13 @@ module MinimedRF
 
       def profile_index
         d(1)
+      end
+
+      def as_json
+        super.merge({
+          alarm_description: alarm_type_str,
+          alarm_type: alarm_type
+        })
       end
 
     end

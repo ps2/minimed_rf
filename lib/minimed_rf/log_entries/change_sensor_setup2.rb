@@ -22,7 +22,7 @@ module MinimedRF
         0x50
       end
 
-      def length
+      def bytesize
         if @pump_model.has_low_suspend
           41
         else

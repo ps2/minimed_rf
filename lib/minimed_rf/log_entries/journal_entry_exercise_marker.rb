@@ -10,7 +10,7 @@ module MinimedRF
         0x41
       end
 
-      def length
+      def bytesize
         8
       end
 

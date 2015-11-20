@@ -4,7 +4,7 @@ module MinimedRF
       def initialize(data, pump_model=nil)
         @data = data
         @pump_model = pump_model
-        @data = @data.byteslice(0,length)
+        @data = @data.byteslice(0,bytesize)
       end
 
       def d(i)
@@ -24,7 +24,7 @@ module MinimedRF
 
 
       def parse_date(offset)
-        if @data.length > offset + 4
+        if @data.bytesize > offset + 4
           sec = d(offset) & 0x3f
           min = d(offset+1) & 0x3f
           hour = d(offset+2) & 0x1f
@@ -36,7 +36,7 @@ module MinimedRF
       end
 
       def valid_for(date_range)
-        return false if @data.length < length
+        return false if @data.bytesize < length
         begin
           time = Time.new(*timestamp)
           return date_range.cover?(time)

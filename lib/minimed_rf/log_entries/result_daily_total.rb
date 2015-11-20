@@ -32,7 +32,7 @@ module MinimedRF
         0x07
       end
 
-      def length
+      def bytesize
         7
       end
 
@@ -40,20 +40,8 @@ module MinimedRF
         "ResultDailyTotal #{timestamp_str}"  # TODO: figure out what this contains
       end
 
-      def day
-        d(5) & 0b11111
-      end
-
-      def month
-        ((d(5) >> 4) & 0b1110) + (d(6) >> 7)
-      end
-
-      def year
-        2000 + (d(6) & 0b1111111)
-      end
-
       def timestamp
-        [year, month, day, 0, 0, 0]
+        parse_date_2byte(5)
       end
     end
   end
