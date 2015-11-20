@@ -8,7 +8,7 @@
 
 module MinimedRF
   module PumpEvents
-    class CalBgForPh < Base
+    class CalBGForPH < Base
 
       def self.event_type_code
         0x0a

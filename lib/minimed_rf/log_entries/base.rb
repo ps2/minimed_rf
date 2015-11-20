@@ -53,7 +53,7 @@ module MinimedRF
         t = timestamp
         unless t.nil?
           year, month, day, hour, min, sec = timestamp
-          sprintf("%04d-%02d-%02dT:%02d:%02d:%02d", year, month, day, hour, min, sec)
+          sprintf("%04d-%02d-%02dT%02d:%02d:%02d", year, month, day, hour, min, sec)
         end
       end
 

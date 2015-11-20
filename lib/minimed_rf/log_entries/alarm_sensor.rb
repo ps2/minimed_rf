@@ -32,7 +32,7 @@ module MinimedRF
           101 => "High Glucose",
           102 => "Low Glucose",
           104 => "Meter BG Now",
-          105 => "Sensor Alarm",
+          105 => "Cal Reminder",
           106 => "Calibration Error",
           107 => "Sensor End",
           112 => "Weak Signal",

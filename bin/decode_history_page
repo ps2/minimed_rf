@@ -2,6 +2,81 @@
 
 require 'minimed_rf'
 require 'json'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: decode_history_page [options] filename pumpmodel"
+
+  opts.on("-d", "--diff-with-decocare", "Compare output to decocare") do |v|
+    options[:diff] = true
+  end
+end.parse!
+
+def compare_attr(ctx, d_attr, m_attr, attr_name)
+  if d_attr != m_attr
+    puts "#{ctx}:#{attr_name} mismatch. decocare = #{d_attr.inspect}, minimed_rf = #{m_attr.inspect}"
+    return false
+  end
+  true
+end
+
+def map_type_to_decocare_type(type)
+  {
+    "AlarmSensor" => "SensorAlert",
+    "BolusWizardBolusEstimate" => "BolusWizard",
+    "BolusNormal" => "Bolus",
+    "ResultDailyTotal" => "MResultTotals",
+    "JournalEntryPumpLowReservoir" => "LowReservoir",
+    "Suspend" => "PumpSuspend",
+    "Resume" => "PumpResume",
+    "AlarmPump" => "NoDelivery",
+  }[type] || type
+end
+
+def compare_to_decocare(records, file, model)
+  #puts "Running: mm-decode-history-page.py --model=#{model} --collate #{file}"
+  output = `mm-decode-history-page.py --model=#{model} --collate #{file} | egrep -v '(^#|^.end)'`
+  ## Decocare sorts most recent first
+  d_records = JSON.parse(output).reverse
+
+  if d_records.count != records.count
+    puts "Mismatch: #{d_records.count} decoded by decocare, #{records.count} by minimed_rf"
+  end
+
+  d_records.each_with_index do |dr, i|
+    r = records[i]
+    ctx = "record[#{i}]"
+
+    # Compare type
+    next unless compare_attr(ctx, dr["_type"], map_type_to_decocare_type(r["_type"]), "_type")
+    ctx = "#{ctx}:#{dr["_type"]} - "
+    r.delete("_type")
+    dr.delete("_type")
+
+    # Don't care about description
+    r.delete("description")
+    dr.delete("description")
+    dr.delete("_description")
+
+    # Compare data
+    d_data = dr["_head"] + dr["_date"] + dr["_body"]
+    if d_data != r["_raw"]
+      puts "#{ctx} - data mismatch: decocare = #{dr["_head"].inspect} #{dr["_date"].inspect} #{dr["_body"].inspect}, minimed_rf = #{r["_raw"].inspect}"
+    end
+    dr.delete("_head")
+    dr.delete("_date")
+    dr.delete("_body")
+    r.delete("_raw")
+
+    keys = (r.keys + dr.keys).sort.uniq
+
+    keys.each do |k|
+      compare_attr(ctx, dr[k], r[k], k)
+    end
+
+  end
+end
 
 if ARGV.length > 1
   data = File.read(ARGV[0])
@@ -10,9 +85,11 @@ if ARGV.length > 1
     puts "Invalid pump model: #{ARGV[1]}"
   end
   history_page = MinimedRF::HistoryPage.new(data, model.new)
-  records = history_page.decode(nil, true)
-  records.each do |r|
-    puts JSON.pretty_generate(r.as_json)
+  records = history_page.decode(nil, false).map(&:as_json)
+  if !options[:diff]
+    puts JSON.pretty_generate(records)
+  else
+    compare_to_decocare(JSON.parse(JSON.generate(records)), ARGV[0], ARGV[1])
   end
 else
   puts "Usage: decode_history_page: datafile pumpmodel"

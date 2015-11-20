@@ -7,7 +7,7 @@
 
 module MinimedRF
   module PumpEvents
-    class BgReceived < Base
+    class BGReceived < Base
 
       def self.event_type_code
         0x3f
