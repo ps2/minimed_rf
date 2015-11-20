@@ -17,7 +17,7 @@ namespace :history do
       if h_type.nil?
         puts "#{code} - #{model}/#{name} (#{decocare_len}) -> ***MISSING***"
       else
-        mmrf_len = h_type.new("\x00\x00").length
+        mmrf_len = h_type.new("\x00\x00", MinimedRF::Model522.new).length
         mmrf_name = h_type.to_s.split("::").last
         puts "#{code} - #{model}/#{name} (#{decocare_len}) -> #{mmrf_name} (#{mmrf_len})"
       end

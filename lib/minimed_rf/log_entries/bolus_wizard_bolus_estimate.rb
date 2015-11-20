@@ -10,6 +10,8 @@ module MinimedRF
       def initialize(data, pump_model=nil)
         super(data, pump_model)
 
+        return if @data.length < length
+
         if @pump_model.larger
           @carbohydrates = ((d(8) & 0xc) << 6) + d(7)
           @blood_glucose = ((d(8) & 0x3) << 8) + d(1)
@@ -40,7 +42,11 @@ module MinimedRF
       end
 
       def length
-        22
+        if @pump_model.larger
+          22
+        else
+          20
+        end
       end
 
       def to_s

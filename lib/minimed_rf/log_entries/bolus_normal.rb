@@ -12,6 +12,8 @@ module MinimedRF
       def initialize(data, pump_model=nil)
         super(data, pump_model)
 
+        return if @data.length < length
+
         if @pump_model.larger
           @amount = insulin_decode(d(1), d(2))
           @programmed_amount = insulin_decode(d(3), d(4))
