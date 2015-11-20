@@ -23,7 +23,7 @@ module MinimedRF
       end
 
       def amount
-        ((d(6) & 0b00100000) << 3) + d(1) 
+        ((d(6) & 0b10000000) << 1) + d(1) 
       end
 
       def timestamp

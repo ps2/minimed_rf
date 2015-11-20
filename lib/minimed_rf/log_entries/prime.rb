@@ -17,18 +17,27 @@ module MinimedRF
       end
 
       def prime_type
-        {
-          0 => "Manual",
-          3 => "Fixed"
-        }[d(2)]
+        programmed_amount == 0 ? "manual" : "fixed"
       end
 
       def amount
         (d(4) << 2) / 40.0
       end
 
+      def programmed_amount
+        (d(2) << 2) / 40.0
+      end
+
       def timestamp
         parse_date(5)
+      end
+
+      def as_json
+        super.merge({
+          amount: amount,
+          type: prime_type,
+          fixed: programmed_amount
+        })
       end
 
     end
