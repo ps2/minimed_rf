@@ -19,15 +19,21 @@ module MinimedRF
       end
 
       def to_s
-        "CalBGForPH #{timestamp_str} BG:#{blood_glucose}"
+        "CalBGForPH #{timestamp_str} amount:#{amount}"
       end
 
-      def blood_glucose
-        ((d(2) & 0b00100000) << 3) + d(1)
+      def amount
+        ((d(6) & 0b00100000) << 3) + d(1) 
       end
 
       def timestamp
         parse_date(2)
+      end
+
+      def as_json
+        super.merge({
+          amount: amount
+        })
       end
 
     end

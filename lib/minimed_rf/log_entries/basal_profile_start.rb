@@ -36,6 +36,18 @@ module MinimedRF
         d(1)
       end
 
+      def start_time
+        d(7) * 30*1000*60
+      end
+
+      def as_json
+        super.merge({
+          offset: start_time,
+          rate: rate,
+          profile_index: profile_index
+        })
+      end
+
     end
   end
 end

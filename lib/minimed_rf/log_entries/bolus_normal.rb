@@ -54,11 +54,11 @@ module MinimedRF
       def as_json
         json = super.merge({
           amount: amount,
-          programmed_amount: programmed_amount,
+          programmed: programmed_amount,
           type: type
         })
         if !unabsorbed_insulin_records.nil?
-          json[:unabsorbed_insulin_records] = unabsorbed_insulin_records.as_json
+          json[:appended] = unabsorbed_insulin_records.as_json
         end
         if !unabsorbed_insulin_total.nil?
           json[:unabsorbed] = unabsorbed_insulin_total

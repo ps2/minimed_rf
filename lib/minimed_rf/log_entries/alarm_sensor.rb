@@ -63,10 +63,14 @@ module MinimedRF
       end
 
       def as_json
-        super.merge({
+        r = super.merge({
           alarm_description: alarm_type_str,
           alarm_type: alarm_type
         })
+        if amount > 0
+          r[:amount] = amount
+        end
+        r
       end
 
     end

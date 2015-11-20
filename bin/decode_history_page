@@ -3,6 +3,7 @@
 require 'minimed_rf'
 require 'json'
 require 'optparse'
+require 'scanf'
 
 options = {}
 OptionParser.new do |opts|
@@ -71,8 +72,23 @@ def compare_to_decocare(records, file, model)
 
     keys = (r.keys + dr.keys).sort.uniq
 
+    mismatch = false
     keys.each do |k|
-      compare_attr(ctx, dr[k], r[k], k)
+      if !compare_attr(ctx, dr[k], r[k], k)
+        mismatch = true
+      end
+    end
+
+    if mismatch
+      # Look for carelink csv
+      dir = File.dirname(file)
+      csv_files = Dir.glob(dir + "/*.csv") + Dir.glob(dir + "/../*.csv")
+      if csv_files.length > 0
+        year, month, day, hour, min, sec = r["timestamp"].scanf("%4d-%2d-%2dT%2d:%2d:%2d")
+        carelink_timestamp = sprintf("%d/%d/%d %02d:%02d:%02d", month, day, year - 2000, hour, min, sec)
+        puts `grep '#{carelink_timestamp}' #{csv_files.join(' ')}`
+      end
+      puts "====================================================="
     end
 
   end

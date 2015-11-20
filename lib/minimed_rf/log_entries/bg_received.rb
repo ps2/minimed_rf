@@ -18,14 +18,14 @@ module MinimedRF
       end
 
       def to_s
-        "BGReceived #{timestamp_str} BG:#{blood_glucose} METER:#{meter_id}"
+        "BGReceived #{timestamp_str} BG:#{amount} METER:#{paradigm_link_id}"
       end
 
-      def blood_glucose
+      def amount
         (d(1) << 3) + (d(4) >> 5)
       end
 
-      def meter_id
+      def paradigm_link_id
         @data.byteslice(7,3).unpack("H*").first
       end
 
@@ -33,6 +33,12 @@ module MinimedRF
         parse_date(2)
       end
 
+      def as_json
+        super.merge({
+          amount: amount,
+          link: paradigm_link_id,
+        })
+      end
     end
   end
 end
