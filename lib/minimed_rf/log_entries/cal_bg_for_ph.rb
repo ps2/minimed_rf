@@ -23,7 +23,7 @@ module MinimedRF
       end
 
       def blood_glucose
-        d(1) # TODO: Need high bits
+        ((d(2) & 0b00100000) << 3) + d(1)
       end
 
       def timestamp
