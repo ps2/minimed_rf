@@ -18,12 +18,12 @@ module MinimedRF
           @amount = insulin_decode(d(1), d(2))
           @programmed_amount = insulin_decode(d(3), d(4))
           @unabsorbed_insulin_total = insulin_decode(d(5), d(6))
+          @type = "normal"
         else
           @amount = d(2)/10.0
           @programmed_amount = d(1)/10.0
           @duration = d(3) * 30
           @type = @duration > 0 ? "square" : "normal"
-
         end
       end
 

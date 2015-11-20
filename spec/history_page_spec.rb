@@ -47,7 +47,7 @@ describe MinimedRF::HistoryPage do
     expect(history_page.crc_ok?).to eq true
 
     entries = history_page.decode
-    expect(entries.length).to eq 49
+    expect(entries.length).to eq 47
 
     bolus = entries.first
     expect(bolus.amount).to eq 2.5
