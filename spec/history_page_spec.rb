@@ -8,7 +8,7 @@ describe MinimedRF::HistoryPage do
     expect(history_page.crc_ok?).to eq true
 
     entries = history_page.decode
-    expect(entries.length).to eq 52
+    expect(entries.length).to eq 51
 
     sara6e = entries[0]
     expect(sara6e.timestamp).to eq [2015, 10, 31, 0, 0, 0]
@@ -18,11 +18,11 @@ describe MinimedRF::HistoryPage do
 
     bw = entries[49]
     expect(bw.blood_glucose).to eq 100
+    expect(bw.bg_target_low).to eq 65
     expect(bw.bg_target_high).to eq 140
     expect(bw.unabsorbed_insulin_total).to eq 0
     expect(bw.correction_estimate).to eq 0
     expect(bw.bolus_estimate).to eq 1.25
-    expect(bw.bg_target_low).to eq 65
     expect(bw.carb_ratio).to eq 12
     expect(bw.food_estimate).to eq 1.25
     expect(bw.carbohydrates).to eq 15
@@ -37,7 +37,7 @@ describe MinimedRF::HistoryPage do
     expect(history_page.crc_ok?).to eq true
 
     entries = history_page.decode
-    expect(entries.length).to eq 29
+    expect(entries.length).to eq 27
   end
 
   it "should decode 522 data" do
@@ -50,7 +50,22 @@ describe MinimedRF::HistoryPage do
     expect(entries.length).to eq 56
 
     bolus = entries.first
-    expect(bolus.amount).to eq 100
+    expect(bolus.amount).to eq 2.5
+    expect(bolus.programmed_amount).to eq 2.5
+    expect(bolus.duration).to eq 0
+    expect(bolus.type).to eq "normal"
+
+    bw = entries[4]
+    expect(bw.blood_glucose).to eq 0
+    expect(bw.bg_target_low).to eq 90
+    expect(bw.bg_target_high).to eq 120
+    expect(bw.insulin_sensitivity).to eq 40
+    expect(bw.correction_estimate).to eq 0.0
+    expect(bw.carbohydrates).to eq 26
+    expect(bw.unabsorbed_insulin_total).to eq 0
+    expect(bw.bolus_estimate).to eq 4.3
+    expect(bw.carb_ratio).to eq 6
+    expect(bw.food_estimate).to eq 4.3
 
   end
 end

@@ -42,7 +42,7 @@ module MinimedRF
             puts "#{event}"
           end
           if event.class == PumpEvents::BolusNormal && !unabsorbed_insulin_record.nil?
-            event.unabsorbed_insulin = unabsorbed_insulin_record
+            event.unabsorbed_insulin_records = unabsorbed_insulin_record
             unabsorbed_insulin_record = nil
           end
           if event.class == PumpEvents::UnabsorbedInsulin

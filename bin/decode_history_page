@@ -3,13 +3,17 @@
 require 'minimed_rf'
 require 'json'
 
-if ARGV.length > 0
+if ARGV.length > 1
   data = File.read(ARGV[0])
-  history_page = MinimedRF::HistoryPage.new(data)
+  model = MinimedRF::Models[ARGV[1]]
+  if model.nil?
+    puts "Invalid pump model: #{ARGV[1]}"
+  end
+  history_page = MinimedRF::HistoryPage.new(data, model.new)
   records = history_page.decode(nil, true)
   records.each do |r|
     puts JSON.pretty_generate(r.as_json)
   end
 else
-  puts "Usage: decode_history_page: datafile"
+  puts "Usage: decode_history_page: datafile pumpmodel"
 end

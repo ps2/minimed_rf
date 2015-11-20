@@ -1,6 +1,6 @@
 module MinimedRF
   class BasePumpModel
-    def records_unabsorbed_insulin_on_bolus
+    def larger
       false
     end
 
@@ -26,12 +26,12 @@ module MinimedRF
   class Model722 < Model522; end
 
   class Model523 < Model522
-    def records_unabsorbed_insulin_on_bolus
-      false
+    def larger
+      true
     end
 
     def strokes_per_unit
-      10
+      40
     end
   end
 
