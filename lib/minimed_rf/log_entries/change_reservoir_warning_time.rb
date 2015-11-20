@@ -18,7 +18,7 @@ module MinimedRF
       end
 
       def to_s
-        "#{change_type_str} #{timestamp_str} amount:#{amount}"
+        "ChangeReservoirWarningTime #{change_type_str} #{timestamp_str} amount:#{amount}"
       end
 
       def change_type

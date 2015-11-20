@@ -34,12 +34,12 @@ module MinimedRF
         if event
           unless skipped.empty?
             if print
-              puts "Skipped: " + skipped
+              puts "************************************************************** Skipped: " + skipped
             end
             skipped = ""
           end
           if print
-            puts "#{event}"
+            puts event.to_s
           end
           if event.class == PumpEvents::BolusNormal && !unabsorbed_insulin_record.nil?
             event.unabsorbed_insulin_records = unabsorbed_insulin_record
@@ -58,7 +58,7 @@ module MinimedRF
       end
 
       unless skipped.empty? || !print
-        puts "Skipped: " + skipped
+        puts "Trailing bytes: " + skipped
       end
 
       return entries
@@ -69,6 +69,9 @@ module MinimedRF
       klazz = @registry[type]
       if klazz
         event = klazz.new(data, @pump_model)
+        if data.length < event.length
+          return nil
+        end
         return event if date_range.nil? || event.valid_for(date_range)
       end
     end
