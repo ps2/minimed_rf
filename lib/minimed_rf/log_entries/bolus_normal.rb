@@ -44,7 +44,11 @@ module MinimedRF
       end
 
       def timestamp
-        parse_date(8)
+        if @pump_model.larger
+          parse_date(8)
+        else
+          parse_date(4)
+        end
       end
 
       def valid_for(date_range)

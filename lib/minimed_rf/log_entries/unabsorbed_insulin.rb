@@ -41,6 +41,10 @@ module MinimedRF
         (d(1) - 2) / 3
       end
 
+      def timestamp
+        nil
+      end
+
       def valid_for(date_range)
         num_records > 0 && num_records < 100
       end

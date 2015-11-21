@@ -59,6 +59,7 @@ def compare_to_decocare(records, file, model)
     r.delete("description")
     dr.delete("description")
     dr.delete("_description")
+    dr.delete("unabsorbed_insulin_count")  # This seems to always be '??'
 
     # Compare data
     d_data = dr["_head"] + dr["_date"] + dr["_body"]
@@ -74,6 +75,17 @@ def compare_to_decocare(records, file, model)
 
     mismatch = false
     keys.each do |k|
+      next if k[0] == "_"
+      next if k[0..11] == "unknown_byte"
+
+      if k == "appended"
+        if dr["appended"][0]["data"] != r["appended"]["data"]
+          puts "#{ctx}:appended/data mismatch. decocare = #{dr["appended"]["data"].inspect}, minimed_rf = #{r["appended"]["data"].inspect}"
+          mismatch = true
+        end
+        next
+      end
+
       if !compare_attr(ctx, dr[k], r[k], k)
         mismatch = true
       end
@@ -84,7 +96,7 @@ def compare_to_decocare(records, file, model)
       dir = File.dirname(file)
       csv_files = Dir.glob(dir + "/*.csv") + Dir.glob(dir + "/../*.csv")
       if csv_files.length > 0
-        year, month, day, hour, min, sec = r["timestamp"].scanf("%4d-%2d-%2dT%2d:%2d:%2d")
+        year, month, day, hour, min, sec = dr["timestamp"].scanf("%4d-%2d-%2dT%2d:%2d:%2d")
         carelink_timestamp = sprintf("%d/%d/%d %02d:%02d:%02d", month, day, year - 2000, hour, min, sec)
         puts `grep '#{carelink_timestamp}' #{csv_files.join(' ')}`
       end
