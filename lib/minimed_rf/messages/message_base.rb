@@ -6,6 +6,11 @@ module MinimedRF
 
     def initialize(data)
       @bits = data.unpack("B*").first
+      @data = data
+    end
+
+    def self.bit_blocks
+      {}
     end
 
     def self.check_bit_block_definitions
@@ -28,6 +33,10 @@ module MinimedRF
 
     def bit_blocks
       self.class.bit_blocks
+    end
+
+    def d(offset)
+      @data.getbyte(i)
     end
 
     def b(name)
