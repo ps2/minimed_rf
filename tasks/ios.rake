@@ -28,7 +28,7 @@ namespace :ios do
       next if klazz == MinimedRF::PumpEvents::Base
       class_name = "PHE" + klazz.to_s.split("::").last
       event_type_code = "0x%02x" % klazz.event_type_code
-      length = klazz.new("0000").length
+      length = klazz.new("0000", MinimedRF::Model522.new).bytesize
       h_file = output_dir + "/" + class_name + ".h"
       if !File.exists?(h_file)
         File.open(h_file, "w+") do |f|
