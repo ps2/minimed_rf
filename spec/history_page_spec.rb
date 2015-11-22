@@ -14,7 +14,7 @@ describe MinimedRF::HistoryPage do
     expect(sara6e.timestamp).to eq [2015, 10, 31, 0, 0, 0]
 
     calbg = entries[48]
-    expect(calbg.to_s).to eq "CalBGForPH 2015-11-14T:20:59:21 BG:100"
+    expect(calbg.to_s).to eq "CalBGForPH 2015-11-14T20:59:21 amount:100"
 
     bw = entries[49]
     expect(bw.blood_glucose).to eq 100

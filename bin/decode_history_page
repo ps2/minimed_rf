@@ -79,7 +79,13 @@ def compare_to_decocare(records, file, model)
       next if k[0..11] == "unknown_byte"
 
       if k == "appended"
-        if dr["appended"][0]["data"] != r["appended"]["data"]
+        if dr["appended"].nil?
+          puts "#{ctx}:appended/data mismatch. decocare missing appended key"
+          mismatch = true
+        elsif r["appended"].nil?
+          puts "#{ctx}:appended/data mismatch. minimed_rf missing appended key"
+          mismatch = true
+        elsif dr["appended"][0]["data"] != r["appended"]["data"]
           puts "#{ctx}:appended/data mismatch. decocare = #{dr["appended"]["data"].inspect}, minimed_rf = #{r["appended"]["data"].inspect}"
           mismatch = true
         end
