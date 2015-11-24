@@ -7,13 +7,6 @@ module MinimedRF
   module PumpEvents
     class AlarmSensor < Base
 
-      class Record
-        attr_accessor :amount, :age
-        def to_s
-          "Amount:#{amount} Age:#{age}"
-        end
-      end
-
       def self.event_type_code
         0x0b
       end
@@ -21,7 +14,6 @@ module MinimedRF
       def bytesize
         8
       end
-
 
       def to_s
         "AlarmSensor #{timestamp_str} #{alarm_type_str} amount:#{amount}"
@@ -51,7 +43,7 @@ module MinimedRF
       end
 
       def amount
-        ((d(7) & 0b10000000) << 1) + d(2) 
+        ((d(7) & 0b10000000) << 1) + d(2)
       end
 
       def timestamp
