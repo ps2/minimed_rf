@@ -14,8 +14,25 @@ module MinimedRF
         52
       end
 
+      def valid_date
+        year, month, day = parse_date_2byte(1)
+        Date.new(year, month, day)
+      end
+
+      def valid_date_str
+        d = valid_date
+        sprintf("%04d-%02d-%02d", d.year, d.month, d.day)
+      end
+
       def timestamp
-        parse_date_2byte(1)
+        midnight = valid_date+1
+        [midnight.year, midnight.month, midnight.day, 0, 0, 0]
+      end
+
+      def as_json
+        super.merge({
+          valid_date: valid_date_str
+        })
       end
 
       def to_s

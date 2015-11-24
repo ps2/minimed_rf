@@ -61,7 +61,6 @@ module MinimedRF
         json = {
           _type: self.class.name.gsub(/^.*::/, ''),
           _raw: data_str,
-          timestamp: timestamp_str,
           description: to_s
         }
         t = timestamp
