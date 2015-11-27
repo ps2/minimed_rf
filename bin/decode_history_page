@@ -4,13 +4,20 @@ require 'minimed_rf'
 require 'json'
 require 'optparse'
 require 'scanf'
+require 'tempfile'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: decode_history_page [options] filename pumpmodel"
+  opts.banner = "Usage: decode_history_page [options] [hexdata]"
 
   opts.on("-d", "--diff-with-decocare", "Compare output to decocare") do |v|
     options[:diff] = true
+  end
+  opts.on("-f", "--file", "Load data from file") do |v|
+    options[:file] = v
+  end
+  opts.on("-p", "--pump", "Specify pump model. 522, 551, etc.") do |v|
+    options[:file] = v
   end
 end.parse!
 
@@ -112,19 +119,34 @@ def compare_to_decocare(records, file, model)
   end
 end
 
-if ARGV.length > 1
-  data = File.read(ARGV[0])
-  model = MinimedRF::Models[ARGV[1]]
-  if model.nil?
-    puts "Invalid pump model: #{ARGV[1]}"
-  end
-  history_page = MinimedRF::HistoryPage.new(data, model.new)
-  records = history_page.decode(nil, false).map(&:as_json)
-  if !options[:diff]
-    puts JSON.pretty_generate(records)
-  else
-    compare_to_decocare(JSON.parse(JSON.generate(records)), ARGV[0], ARGV[1])
-  end
+if options[:file]
+  data = File.read(options[:file])
 else
-  puts "Usage: decode_history_page: datafile pumpmodel"
+  if ARGV.length > 0
+    data = [ARGV[0]].pack('H*')
+  else
+    puts "Usage: decode_history_page: datafile pumpmodel"
+    exit -1
+  end
+end
+if options[:model]
+  model_str = options[:model]
+else
+  model_str = '551'
+end
+model = MinimedRF::Models[model_str]
+if model.nil?
+  puts "Invalid pump model: #{model_str}"
+end
+history_page = MinimedRF::HistoryPage.new(data, model.new)
+records = history_page.decode(nil, false).map(&:as_json)
+if !options[:diff]
+  puts JSON.pretty_generate(records)
+else
+  file = Tempfile.new('historypage')
+  file.write(data)
+  file.path
+  file.close
+  compare_to_decocare(JSON.parse(JSON.generate(records)), file.path, model_str)
+  file.unlink
 end
