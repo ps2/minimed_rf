@@ -11,12 +11,7 @@ def handle_input(input)
   input = input.gsub(/\W/,'')
 
   if input.bytesize == 2048
-    history_page = MinimedRF::HistoryPage.new([input].pack('H*'))
-    if history_page.crc_ok?
-      entries = history_page.decode(nil, true)
-    else
-      puts "Invalid crc16 for history page."
-    end
+    puts "Use the decode_history_page command to decode history pages."
     exit
   end
 
