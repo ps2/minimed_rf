@@ -11,7 +11,14 @@ describe MinimedRF::HistoryPage do
     expect(entries.length).to eq 51
 
     sara6e = entries[0]
-    expect(sara6e.timestamp).to eq [2015, 10, 31, 0, 0, 0]
+    # entry is for the last day of october,
+    # but to follow decocare, we record timestamp
+    # as midnight at the end of that day, which is
+    # when the actual record is created
+    expect(sara6e.timestamp).to eq [2015, 11, 1, 0, 0, 0]
+    expect(sara6e.valid_date.month).to eq 10
+    expect(sara6e.valid_date.day).to eq 31
+
 
     calbg = entries[48]
     expect(calbg.to_s).to eq "CalBGForPH 2015-11-14T20:59:21 amount:100"
