@@ -13,11 +13,11 @@ OptionParser.new do |opts|
   opts.on("-d", "--diff-with-decocare", "Compare output to decocare") do |v|
     options[:diff] = true
   end
-  opts.on("-f", "--file", "Load data from file") do |v|
+  opts.on("-f", "--file=file", "Load data from file") do |v|
     options[:file] = v
   end
-  opts.on("-p", "--pump", "Specify pump model. 522, 551, etc.") do |v|
-    options[:file] = v
+  opts.on("-p", "--pump=model", "Specify pump model. 522, 551, etc.") do |v|
+    options[:model] = v
   end
 end.parse!
 
@@ -125,7 +125,7 @@ else
   if ARGV.length > 0
     data = [ARGV[0]].pack('H*')
   else
-    puts "Usage: decode_history_page: datafile pumpmodel"
+    puts "Usage: mmhistory datafile pumpmodel"
     exit -1
   end
 end

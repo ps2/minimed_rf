@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+
+require 'minimed_rf'
+require 'serialport'
+
+# This utility talks over a serial connection to a RileyLink that has been
+# loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
+
+if ARGV.length < 1
+  puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG [channel]"
+  exit -1
+end
+
+class SerialRL
+
+  CMD_GET_STATE = 1
+  CMD_GET_VERSION = 2
+  CMD_SET_CHANNEL = 3
+  CMD_GET_PACKET = 4
+  CMD_SEND_PACKET = 5
+
+
+  def initialize(path)
+    @ser = SerialPort.new path
+    @ser.baud = 19200
+    @ser.flow_control = SerialPort::HARD
+    # Non-blocking read
+    @ser.read_timeout = -1
+    @buf = ""
+  end
+
+  def do_command(command, param="")
+    send_command(command, param)
+    get_response
+  end
+
+  def send_command(command, param="")
+    @ser.write(command.chr)
+    if param.bytesize > 0
+      @ser.write(param)
+    end
+  end
+
+  def get_response(timeout=0)
+    start = Time.now
+    if timeout > 0
+      @ser.read_timeout = timeout * 1000
+    else
+      @ser.read_timeout = 0  # Wait for data
+    end
+
+    while 1
+      @buf += @ser.readpartial(4096)
+      puts "@buf1 = #{@buf.inspect}"
+      eop = @buf.bytes.index(0)
+      if eop
+        r = @buf.byteslice(0,eop)
+        @buf = @buf.byteslice(eop+1..-1)
+        puts "@buf2 = #{@buf.inspect}"
+        return r
+      end
+      if (timeout > 0) && (Time.now - start > timeout)
+        puts "timed out"
+        return nil
+      end
+    end
+  end
+
+  def sync
+    while 1
+      send_command(CMD_GET_STATE)
+      data = get_response(1)
+      if data == "OK"
+        puts "RileyLink " + data
+        break
+      end
+      puts "retry"
+    end
+
+    while 1
+      send_command(CMD_GET_VERSION)
+      data = get_response(1)
+      if data.bytesize >= 3
+        puts "Version: " + data
+        break
+      end
+      puts "retry"
+    end
+  end
+end
+
+channel = 2
+if ARGV.length == 2
+  channel = ARGV[1].to_i
+end
+
+
+puts "Opening #{ARGV[0]}"
+rl = SerialRL.new(ARGV[0])
+rl.sync
+rl.do_command(SerialRL::CMD_SET_CHANNEL, channel.chr)
+while 1
+  rl.send_command(SerialRL::CMD_GET_PACKET)
+  packet = rl.get_response()
+  if packet.bytesize > 2
+    puts "Packet: #{packet.inspect}"
+  end
+end

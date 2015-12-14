@@ -4,7 +4,7 @@ Many Medtronic insulin pumps are capable of sending CGM data to a remote monitor
 
 ## rf modulation
 
-The frequency used is 916.5MHz, and the modulation is ASK/OOK. Data rate is 16kBaud. I use an RX filter BW of 203kHz since the pump, sensor, and mysentry all use different antennas and the frequency varies a bit from the center.
+The frequency used is 916.5MHz, and the modulation is ASK/OOK. Data rate is 16kBaud. I use an RX filter BW of 203kHz since the pump, sensor, and MySentry all use different antennas and the frequency varies a bit from the center.
 
 Here are the settings I use to configure a cc1110 with a 24MHz crystal:
 
@@ -83,13 +83,13 @@ a2 identifies the type of packet, 597055 is the pump number, etc...  The 0c at t
 ## usage
 
 ```
-ruby -I lib bin/decode_minimed <packetdata>
+ruby -I lib bin/mmdecode <packetdata>
 ```
 
 ## example
 
 ```
-ruby -I lib bin/decode_minimed ab29595959655743a5d31c7254ec4b54e55a54b555d0dd0e5555716aa563571566c9ac7258e565574555d1c55555555568bc7256c55554e55a54b55555556c55
+ruby -I lib bin/mmdecode ab29595959655743a5d31c7254ec4b54e55a54b555d0dd0e5555716aa563571566c9ac7258e565574555d1c55555555568bc7256c55554e55a54b55555556c55
 a2 597055 PumpStatus: #101 2014-08-11 18:14:00 -0500 - Glucose=154 PreviousGlucose=156 ActiveInsulin=1.975
 ```
 

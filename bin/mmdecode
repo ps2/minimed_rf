@@ -11,7 +11,7 @@ def handle_input(input)
   input = input.gsub(/\W/,'')
 
   if input.bytesize == 2048
-    puts "Use the decode_history_page command to decode history pages."
+    puts "Use the mmhistory command to decode history pages."
     exit
   end
 
@@ -60,7 +60,7 @@ end
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: example.rb [options]"
+  opts.banner = "Usage: mmdecode.rb [options]"
 
   opts.on("-f", "--file FILE", "Read binary data directly from file") do |v|
     options[:file] = file
