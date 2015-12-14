@@ -24,16 +24,16 @@ module MinimedRF
           @insulin_sensitivity = d(11)
           @carb_ratio = ((d(9) & 0x7) << 8) + d(10) / 10.0
         else
-          @blood_glucose = ((d(8) & 0x3) << 8) + d(1)
           @carbohydrates = d(7)
-          @carb_ratio = d(9)
-          @insulin_sensitivity = d(10)
+          @blood_glucose = ((d(8) & 0x3) << 8) + d(1)
+          @food_estimate = d(13)/10.0
+          @correction_estimate = ((d(14) << 8) + d(12)) / 10.0
+          @bolus_estimate = d(18)/10.0
+          @unabsorbed_insulin_total = d(16)/10.0
           @bg_target_low = d(11)
           @bg_target_high = d(19)
-          @bolus_estimate = d(18)/10.0
-          @food_estimate = d(13)/10.0
-          @unabsorbed_insulin_total = d(16)/10.0
-          @correction_estimate = ((d(14) << 8) + d(12)) / 10.0
+          @insulin_sensitivity = d(10)
+          @carb_ratio = d(9)
         end
       end
 
