@@ -36,7 +36,7 @@ module MinimedRF
     end
 
     def d(offset)
-      @data.getbyte(i)
+      @data.getbyte(offset)
     end
 
     def b(name)

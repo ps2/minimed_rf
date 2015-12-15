@@ -21,7 +21,7 @@ def handle_input(input)
   end
 
   # try raw
-  packet = MinimedRF::Packet.decode_from_radio(input)
+  packet = MinimedRF::Packet.decode_from_radio_hex(input)
 
   # try decoded
   if !packet.valid?

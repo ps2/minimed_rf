@@ -51,12 +51,10 @@ class SerialRL
 
     while 1
       @buf += @ser.readpartial(4096)
-      puts "@buf1 = #{@buf.inspect}"
       eop = @buf.bytes.index(0)
       if eop
         r = @buf.byteslice(0,eop)
         @buf = @buf.byteslice(eop+1..-1)
-        puts "@buf2 = #{@buf.inspect}"
         return r
       end
       if (timeout > 0) && (Time.now - start > timeout)
@@ -101,8 +99,9 @@ rl.sync
 rl.do_command(SerialRL::CMD_SET_CHANNEL, channel.chr)
 while 1
   rl.send_command(SerialRL::CMD_GET_PACKET)
-  packet = rl.get_response()
-  if packet.bytesize > 2
-    puts "Packet: #{packet.inspect}"
+  data = rl.get_response()
+  if data.bytesize > 2
+    packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
+    puts "Packet: #{packet}"
   end
 end

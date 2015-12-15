@@ -26,9 +26,10 @@ module MinimedRF
     end
 
     def data=(data)
-      # Address type (first byte of packet):
+      # Packet type (first byte of packet):
       # 0xa2 (162) = mysentry
       # 0xa5 (165) = glucose meter (bayer contour)
+      # 0xa6 (166) = paradigm remote (MMT-503NA)
       # 0xa7 (167) = pump
       # 0xa8 (168) = sensor test
       # 0xaa (170) = sensor
@@ -127,6 +128,8 @@ module MinimedRF
           end
         when 0xa5
           MinimedRF::Meter.new(data[4..-2])
+        when 0xa6
+          MinimedRF::Remote.new(data[0..-2])
         when 0xa8, 0xaa, 0xab
           MinimedRF::Sensor.new(data)
           # Sensor
@@ -140,10 +143,14 @@ module MinimedRF
       p
     end
 
-    def self.decode_from_radio(hex_str)
-      p = Packet.new
+    def self.decode_from_radio_hex(hex_str)
+      decode_from_radio([hex_str].pack('H*'))
+    end
+
+    def self.decode_from_radio(data)
       coding_errors = 0
-      radio_bytes = [hex_str].pack('H*').bytes
+      p = Packet.new
+      radio_bytes = data.bytes
       bits = radio_bytes.map {|d| "%08b" % d}.join
       decoded_symbols = []
       bits.scan(/.{6}/).each do |word_bits|
