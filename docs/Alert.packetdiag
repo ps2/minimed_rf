@@ -3,6 +3,12 @@ colwidth=32
 0-7: packet_type [color = "none"]
 8-31: addr [color = "none"]
 32-39: message_type [color = "none"]
-40-47: sequence [color = "none"]
+41-47: sequence [color = "none"]
 48-55: alert_type [color = "none"]
+59-63: alert_hour [color = "none"]
+66-71: alert_minute [color = "none"]
+74-79: alert_second [color = "none"]
+80-87: alert_year [color = "none"]
+92-95: alert_month [color = "none"]
+99-103: alert_day [color = "none"]
 }
