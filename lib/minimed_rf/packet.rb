@@ -1,6 +1,6 @@
 module MinimedRF
   class Packet
-    attr_accessor :address, :data, :message_type, :channel, :capture_time, :coding_errors, :packet_type
+    attr_accessor :address, :data, :sequence, :rssi, :message_type, :channel, :capture_time, :coding_errors, :packet_type
 
     def initialize
       coding_errors = 0

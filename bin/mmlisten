@@ -35,6 +35,7 @@ class SerialRL
   end
 
   def send_command(command, param="")
+    #puts "Sending command: #{command.inspect}"
     @ser.write(command.chr)
     if param.bytesize > 0
       @ser.write(param)
@@ -61,6 +62,23 @@ class SerialRL
         puts "timed out"
         return nil
       end
+    end
+  end
+
+  def get_packet
+    data = do_command(CMD_GET_PACKET)
+    if data.bytesize > 2
+      #puts "Got data: #{data.unpack("H*")}"
+      packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
+      rssi_dec = data.getbyte(0)
+      rssi_offset = 73
+      if rssi_dec >= 128
+        packet.rssi = (( rssi_dec - 256) / 2) - rssi_offset
+      else
+        packet.rssi = (rssi_dec / 2) - rssi_offset
+      end
+      packet.sequence = data.getbyte(1)
+      packet
     end
   end
 
@@ -98,10 +116,8 @@ rl = SerialRL.new(ARGV[0])
 rl.sync
 rl.do_command(SerialRL::CMD_SET_CHANNEL, channel.chr)
 while 1
-  rl.send_command(SerialRL::CMD_GET_PACKET)
-  data = rl.get_response()
-  if data.bytesize > 2
-    packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
-    puts "Packet: #{packet}"
+  packet = rl.get_packet
+  if packet
+    puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
   end
 end
