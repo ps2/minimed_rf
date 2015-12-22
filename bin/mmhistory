@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# Takes a binary file or hexdata string, and decodes it as a history page.
+
+
 require 'minimed_rf'
 require 'json'
 require 'optparse'

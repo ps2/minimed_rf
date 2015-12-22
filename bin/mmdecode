@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Takes a hex string as an argument and attempts to decode it.
+
 require 'optparse'
 require 'base64'
 require 'minimed_rf'
