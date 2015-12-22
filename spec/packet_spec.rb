@@ -31,4 +31,12 @@ describe MinimedRF::Packet do
     expect(radio_symbols).to eq "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b100"
   end
 
+  it "should build raw packet from hex without crc" do
+    hex_data = "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b0000"
+    packet = MinimedRF::Packet.from_hex_without_crc(hex_data)
+    radio_symbols = packet.encode
+    expect(radio_symbols).to eq "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b100"
+  end
+
+
 end

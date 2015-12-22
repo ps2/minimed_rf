@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+# This utility talks over a serial connection to a RileyLink that has been
+# loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
+
+# It attempts to wake the pump, and get history
+
+# Must install the serialport gem to use this.
+
+require 'minimed_rf'
+require 'minimed_rf/serial'
+
+if ARGV.length < 2 || ARGV[1].length != 6
+  puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG pumpserial"
+  if ARGV[1].length != 6
+    puts "Error: pumpserial should be a six character id, like '55AB12'"
+  end
+  exit -1
+end
+
+channel = 0
+pump_serial = ARGV[1]
+
+puts "Opening #{ARGV[0]}"
+rl = MinimedRF::SerialRL.new(ARGV[0])
+rl.sync
+rl.do_command(MinimedRF::SerialRL::CMD_SET_CHANNEL, channel.chr)
+
+# Send wake-up packets
+# a73505355d0048
+wake_up = MinimedRF::Packet.from_hex_without_crc("a7" + pump_serial + "5d00")
+puts "Wakeup packet = #{wake_up.hex_data}"
+
+rl.send_packet(wake_up, 100)
+
+#   packet = rl.get_packet
+#   if packet
+#     puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
+#   end
+# end

@@ -143,6 +143,13 @@ module MinimedRF
       p
     end
 
+    def self.from_hex_without_crc(hex)
+      data = [hex].pack('H*')
+      p = Packet.new
+      p.data = (data.bytes << CRC8::compute(data.bytes)).pack("c*")
+      p
+    end
+
     def self.decode_from_radio_hex(hex_str)
       decode_from_radio([hex_str].pack('H*'))
     end

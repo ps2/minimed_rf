@@ -72,6 +72,14 @@ module MinimedRF
       end
     end
 
+    def send_packet(packet, count=1)
+      encoded = [packet.encode].pack('H*')
+      puts "Sending #{packet.encode}"
+      count.times do
+        data = do_command(CMD_SEND_PACKET, packet.data)
+      end
+    end
+
     def sync
       while 1
         send_command(CMD_GET_STATE)

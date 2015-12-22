@@ -3,6 +3,8 @@
 # This utility talks over a serial connection to a RileyLink that has been
 # loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
 
+# It asks the cc1110 to listen for packets, receives them, decodes, and prints them out.
+
 # Must install the serialport gem to use this.
 
 require 'minimed_rf'
@@ -27,5 +29,6 @@ while 1
   packet = rl.get_packet
   if packet
     puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
+    puts "Raw: #{packet.hex_data}"
   end
 end
