@@ -68,7 +68,7 @@ module MinimedRF
       encoded = [p.encode].pack('H*')
       prefix = [channel, count, msec_repeat_delay].pack("c*")
       data = do_command(CMD_SEND_PACKET, prefix + encoded)
-      puts "#{Time.now.strftime('%H:%M:%S.%3N')} Sent #{p.encode}"
+      #puts "#{Time.now.strftime('%H:%M:%S.%3N')} Sent #{p.encode}"
       data
     end
 

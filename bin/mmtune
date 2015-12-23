@@ -3,13 +3,13 @@
 # This utility talks over a serial connection to a RileyLink that has been
 # loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
 
-# It attempts to wake the pump, and get history
+# It attempts to query pump model many times to get an estimate of connection quality
 
 require 'minimed_rf'
 require 'minimed_rf/serial'
 
 if ARGV.length < 2 || ARGV[1].length != 6
-  puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG pumpserial"
+  puts "Usage: mmtune /dev/tty.usbserial-A9048LGG pumpserial"
   if ARGV.length > 1 && ARGV[1].length != 6
     puts "Error: pumpserial should be a six character id, like '55AB12'"
   end
@@ -37,11 +37,15 @@ tx_channel = 0
 rx_timeout_ms = 80
 
 # Try quick model check to see if pump is awake
-rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-packet = rl.get_packet(rx_channel, 80)
-if packet
-  print_packet(packet)
-  awake = true
+awake = false
+3.times do
+  rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
+  packet = rl.get_packet(rx_channel, 80)
+  if packet
+    print_packet(packet)
+    awake = true
+    break
+  end
 end
 
 if !awake
@@ -52,19 +56,20 @@ if !awake
     print_packet(wake_ack)
   else
     puts "Pump not responding"
-    exit -1
   end
+end
 
-  # Get model
+# Get model
+success_count = 0
+40.times do
   rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-  print_packet(rl.get_packet(rx_channel))
+  packet = rl.get_packet(rx_channel, 80)
+  if packet && packet.valid?
+    puts "Good!"
+    success_count += 1
+  else
+    print_packet(packet)
+  end
 end
 
-# Get history page
-rl.send_packet("a7" + pump_serial + "8000", tx_channel)
-print_packet(rl.get_packet(rx_channel, rx_timeout_ms))
-rl.send_packet("a7" + pump_serial + "8001" + "00" * 64, tx_channel)
-16.times do
-  print_packet(rl.get_packet(rx_channel, rx_timeout_ms))
-  rl.send_packet("a7" + pump_serial + "0600", tx_channel)
-end
+puts "Success rate: #{success_count / 40.0 * 100}%"
