@@ -1,3 +1,5 @@
 .DS_Store
 .env
 tmppacket.packetdiag
+tmppacket.svg
+pkg

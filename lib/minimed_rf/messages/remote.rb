@@ -3,6 +3,10 @@ module MinimedRF
   class Remote < Message
 
     # a6 41152 5885d 46
+    def self.bit_blocks
+      {
+      }
+    end
 
     def remote_id
       @data.byteslice(1,3).unpack("H*").first

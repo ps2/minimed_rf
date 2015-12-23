@@ -47,7 +47,7 @@ module MinimedRF
     def get_packet(timeout = 0)
       data = do_command(CMD_GET_PACKET, timeout.chr)
       if data.bytesize > 2
-        #puts "Got data: #{data.unpack("H*")}"
+        puts "Got data: #{data.unpack("H*")}"
         packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
         rssi_dec = data.getbyte(0)
         rssi_offset = 73

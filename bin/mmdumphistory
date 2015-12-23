@@ -12,7 +12,7 @@ require 'minimed_rf/serial'
 
 if ARGV.length < 2 || ARGV[1].length != 6
   puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG pumpserial"
-  if ARGV[1].length != 6
+  if ARGV.length > 1 && ARGV[1].length != 6
     puts "Error: pumpserial should be a six character id, like '55AB12'"
   end
   exit -1
@@ -45,11 +45,11 @@ sleep(0.02)
 
 # Get history page
 rl.set_channel(0); rl.send_packet("a7" + pump_serial + "8000")
-rl.set_channel(2); print_packet(rl.get_packet(20))
+rl.set_channel(2); print_packet(rl.get_packet(80))
 sleep(0.02)
 rl.set_channel(0); rl.send_packet("a7" + pump_serial + "800100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 16.times do
-  rl.set_channel(2); print_packet(rl.get_packet(20))
+  rl.set_channel(2); print_packet(rl.get_packet(80))
   sleep(0.02)
   rl.set_channel(0); rl.send_packet("a7" + pump_serial + "0600")
 end

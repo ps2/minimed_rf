@@ -1,0 +1,13 @@
+packetdiag {
+colwidth=32
+0-7: packet_type [color = "none"]
+8-31: addr [color = "none"]
+32-39: message_type [color = "none"]
+44-47: state [color = "none"]
+56-79: address [color = "none"]
+80-87: version [color = "none"]
+96-103: isig_adj [color = "none"]
+104-107: sequence [color = "none"]
+108-111: repeat [color = "none"]
+112-127: isig [color = "none"]
+}
