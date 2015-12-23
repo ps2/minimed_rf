@@ -9,7 +9,6 @@ module MinimedRF
     CMD_GET_PACKET = 4
     CMD_SEND_PACKET = 5
 
-
     def initialize(path)
       @ser = SerialPort.new path
       @ser.baud = 19200
@@ -21,7 +20,7 @@ module MinimedRF
 
     def do_command(command, param="")
       send_command(command, param)
-      get_response
+      get_response()
     end
 
     def send_command(command, param="")
@@ -32,14 +31,8 @@ module MinimedRF
       end
     end
 
-    def get_response(timeout=0)
-      start = Time.now
-      if timeout > 0
-        @ser.read_timeout = timeout * 1000
-      else
-        @ser.read_timeout = 0  # Wait for data
-      end
-
+    def get_response
+      @ser.read_timeout = 0
       while 1
         @buf += @ser.readpartial(4096)
         eop = @buf.bytes.index(0)
@@ -48,15 +41,11 @@ module MinimedRF
           @buf = @buf.byteslice(eop+1..-1)
           return r
         end
-        if (timeout > 0) && (Time.now - start > timeout)
-          puts "timed out"
-          return nil
-        end
       end
     end
 
-    def get_packet
-      data = do_command(CMD_GET_PACKET)
+    def get_packet(timeout = 0)
+      data = do_command(CMD_GET_PACKET, timeout.chr)
       if data.bytesize > 2
         #puts "Got data: #{data.unpack("H*")}"
         packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
@@ -72,18 +61,22 @@ module MinimedRF
       end
     end
 
-    def send_packet(packet, count=1)
-      encoded = [packet.encode].pack('H*')
-      puts "Sending #{packet.encode}"
-      count.times do
-        data = do_command(CMD_SEND_PACKET, packet.data)
-      end
+    def send_packet(data, count=1, msec_repeat_delay=0)
+      p = MinimedRF::Packet.from_hex_without_crc(data)
+      encoded = [p.encode].pack('H*')
+      #puts "Sending #{p.encode}"
+      prefix = [count, msec_repeat_delay].pack("c*")
+      data = do_command(CMD_SEND_PACKET, prefix + encoded)
+    end
+
+    def set_channel(channel)
+      do_command(CMD_SET_CHANNEL, channel.chr)
     end
 
     def sync
       while 1
         send_command(CMD_GET_STATE)
-        data = get_response(1)
+        data = get_response
         if data == "OK"
           puts "RileyLink " + data
           break
@@ -93,7 +86,7 @@ module MinimedRF
 
       while 1
         send_command(CMD_GET_VERSION)
-        data = get_response(1)
+        data = get_response
         if data.bytesize >= 3
           puts "Version: " + data
           break

@@ -18,23 +18,44 @@ if ARGV.length < 2 || ARGV[1].length != 6
   exit -1
 end
 
-channel = 0
 pump_serial = ARGV[1]
+
+def print_packet(p)
+  if p.nil?
+    puts "Nil packet!"
+  else
+    puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
+    puts "raw: #{p.hex_data}"
+  end
+end
 
 puts "Opening #{ARGV[0]}"
 rl = MinimedRF::SerialRL.new(ARGV[0])
 rl.sync
-rl.do_command(MinimedRF::SerialRL::CMD_SET_CHANNEL, channel.chr)
 
-# Send wake-up packets
-# a73505355d0048
-wake_up = MinimedRF::Packet.from_hex_without_crc("a7" + pump_serial + "5d00")
-puts "Wakeup packet = #{wake_up.hex_data}"
+# Send 80 wake-up packets
+rl.set_channel(0); rl.send_packet("a7" + pump_serial + "5d00", 80)
+rl.set_channel(2); print_packet(rl.get_packet)
+sleep(0.01)
 
-rl.send_packet(wake_up, 100)
+# Get model
+rl.set_channel(0); rl.send_packet("a7" + pump_serial + "8d00")
+rl.set_channel(2); print_packet(rl.get_packet)
+sleep(0.02)
+
+# Get history page
+rl.set_channel(0); rl.send_packet("a7" + pump_serial + "8000")
+rl.set_channel(2); print_packet(rl.get_packet(20))
+sleep(0.02)
+rl.set_channel(0); rl.send_packet("a7" + pump_serial + "800100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
+16.times do
+  rl.set_channel(2); print_packet(rl.get_packet(20))
+  sleep(0.02)
+  rl.set_channel(0); rl.send_packet("a7" + pump_serial + "0600")
+end
+
 
 #   packet = rl.get_packet
 #   if packet
-#     puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
 #   end
 # end
