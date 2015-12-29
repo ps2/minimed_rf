@@ -1,14 +1,25 @@
 module MinimedRF
   class WakeUp < Message
 
-    # a7 350535 5d 00 48
     def self.bit_blocks
       {
       }
     end
 
+    def arg_count
+      d(0)
+    end
+
+    def minutes
+      d(2)
+    end
+
     def to_s
-      "WakeUp"
+      if arg_count > 0
+        "WakeUp minutes=#{minutes}"
+      else
+        "WakeUp"
+      end
     end
   end
 end
