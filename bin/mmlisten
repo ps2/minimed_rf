@@ -24,12 +24,11 @@ end
 puts "Opening #{ARGV[0]}"
 rl = MinimedRF::SerialRL.new(ARGV[0])
 rl.sync
-rl.set_channel(channel)
 while 1
-  packet = rl.get_packet(100)
+  packet = rl.get_packet(channel)
   if packet
     puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
-    puts "Raw: #{packet.hex_data}"
+    #puts "Raw: #{packet.hex_data}"
   else
     puts "timeout"
     exit
