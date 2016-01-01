@@ -34,7 +34,7 @@ rl.sync
 # Change these to 3 and 1 when pump is detuned by body (laying on it)
 rx_channel = 2
 tx_channel = 0
-rx_timeout_ms = 80
+rx_timeout_ms = 180
 
 # Try quick model check to see if pump is awake
 rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
@@ -47,7 +47,7 @@ end
 if !awake
   # Send 200 wake-up packets
   rl.send_packet("a7" + pump_serial + "5d00", tx_channel, 200)
-  wake_ack = rl.get_packet(rx_channel, 9000) # wait 9 s for response
+  wake_ack = rl.get_packet(rx_channel, 10000) # wait 10 s for response
   if wake_ack
     print_packet(wake_ack)
   else

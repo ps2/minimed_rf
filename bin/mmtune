@@ -59,9 +59,11 @@ if !awake
   end
 end
 
-# Get model
+sample_size = 140
 success_count = 0
-40.times do
+
+# Run trial
+sample_size.times do
   rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
   packet = rl.get_packet(rx_channel, 80)
   if packet && packet.valid?
@@ -72,4 +74,4 @@ success_count = 0
   end
 end
 
-puts "Success rate: #{success_count / 40.0 * 100}%"
+puts "Success rate: #{success_count.to_f / sample_size * 100}%"

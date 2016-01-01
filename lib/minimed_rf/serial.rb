@@ -7,6 +7,7 @@ module MinimedRF
     CMD_GET_VERSION = 2
     CMD_GET_PACKET = 3
     CMD_SEND_PACKET = 4
+    CMD_SEND_AND_LISTEN = 5
 
     def initialize(path)
       @ser = SerialPort.new path
@@ -19,7 +20,7 @@ module MinimedRF
 
     def do_command(command, param="")
       send_command(command, param)
-      get_response()
+      get_response
     end
 
     def send_command(command, param="")
@@ -34,6 +35,7 @@ module MinimedRF
       @ser.read_timeout = 0
       while 1
         @buf += @ser.readpartial(4096)
+        #puts "Read: #{@buf.unpack("H*")}"
         eop = @buf.bytes.index(0)
         if eop
           r = @buf.byteslice(0,eop)
@@ -46,8 +48,8 @@ module MinimedRF
     def get_packet(channel, timeout = 0)
       args = [channel, timeout >> 8, timeout].pack("c*")
       data = do_command(CMD_GET_PACKET, args)
+      #puts "#{Time.now.strftime('%H:%M:%S.%3N')} Raw data: #{data.unpack("H*")}"
       if data.bytesize > 2
-        #puts "#{Time.now.strftime('%H:%M:%S.%3N')} Raw data: #{data.unpack("H*")}"
         packet = MinimedRF::Packet.decode_from_radio(data.byteslice(2..-1))
         rssi_dec = data.getbyte(0)
         rssi_offset = 73
@@ -63,10 +65,10 @@ module MinimedRF
       end
     end
 
-    def send_packet(data, channel, count=1, msec_repeat_delay=0)
+    def send_packet(data, channel, repeat=0, msec_repeat_delay=0)
       p = MinimedRF::Packet.from_hex_without_crc(data)
       encoded = [p.encode].pack('H*')
-      prefix = [channel, count, msec_repeat_delay].pack("c*")
+      prefix = [channel, repeat, msec_repeat_delay].pack("c*")
       data = do_command(CMD_SEND_PACKET, prefix + encoded)
       #puts "#{Time.now.strftime('%H:%M:%S.%3N')} Sent #{p.encode}"
       data
