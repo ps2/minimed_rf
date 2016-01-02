@@ -130,9 +130,10 @@ class MMTune
       vals << chanspc_m
     end
     puts "Vals = #{vals}"
-    vals.min_by { |chanspc_m|
+    chanspc_m = vals.min_by { |chanspc_m|
       ((ch_khz*1000) - freq_div * (256 + chanspc_m)*(2**chanspc_m)).abs
     }
+    return [vals.find_index(chanspc_m), chanspc_m]
   end
 
   def run
@@ -143,7 +144,7 @@ class MMTune
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
-    puts "calc_chanspc(50.8) = #{calc_chanspc(50.8)}"
+    puts "calc_chanspc(200) = #{calc_chanspc(200)}"
 
     #scan_over_freq
     #scan_over_rx_bw
