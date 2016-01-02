@@ -8,7 +8,7 @@
 # Must install the serialport gem to use this.
 
 require 'minimed_rf'
-require 'minimed_rf/serial'
+require 'minimed_rf/rfspy'
 
 if ARGV.length < 1
   puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG [channel]"
@@ -22,7 +22,7 @@ if ARGV.length == 2
 end
 
 puts "Opening #{ARGV[0]}"
-rl = MinimedRF::SerialRL.new(ARGV[0])
+rl = MinimedRF::RFSpy.new(ARGV[0])
 rl.sync
 while 1
   packet = rl.get_packet(channel)

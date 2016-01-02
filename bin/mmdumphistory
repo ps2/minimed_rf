@@ -6,10 +6,10 @@
 # It attempts to wake the pump, and get history
 
 require 'minimed_rf'
-require 'minimed_rf/serial'
+require 'minimed_rf/rfspy'
 
 if ARGV.length < 2 || ARGV[1].length != 6
-  puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG pumpserial"
+  puts "Usage: mmdumphistory /dev/tty.usbserial-A9048LGG pumpserial"
   if ARGV.length > 1 && ARGV[1].length != 6
     puts "Error: pumpserial should be a six character id, like '55AB12'"
   end
@@ -28,13 +28,13 @@ def print_packet(p)
 end
 
 puts "Opening #{ARGV[0]}"
-rl = MinimedRF::SerialRL.new(ARGV[0])
+rl = MinimedRF::RFSpy.new(ARGV[0])
 rl.sync
 
 # Change these to 3 and 1 when pump is detuned by body (laying on it)
 rx_channel = 2
 tx_channel = 0
-rx_timeout_ms = 180
+rx_timeout_ms = 80
 
 # Try quick model check to see if pump is awake
 rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
@@ -44,7 +44,7 @@ if packet
   awake = true
 end
 
-if !awake
+if true #!awake
   # Send 200 wake-up packets
   rl.send_packet("a7" + pump_serial + "5d00", tx_channel, 200)
   wake_ack = rl.get_packet(rx_channel, 10000) # wait 10 s for response

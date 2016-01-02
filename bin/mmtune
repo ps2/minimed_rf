@@ -6,7 +6,7 @@
 # It attempts to query pump model many times to get an estimate of connection quality
 
 require 'minimed_rf'
-require 'minimed_rf/serial'
+require 'minimed_rf/rfspy'
 
 if ARGV.length < 2 || ARGV[1].length != 6
   puts "Usage: mmtune /dev/tty.usbserial-A9048LGG pumpserial"
@@ -18,60 +18,139 @@ end
 
 pump_serial = ARGV[1]
 
-def print_packet(p)
-  if p.nil?
-    puts "Nil packet!"
-  else
-    puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
-    #puts "raw: #{p.hex_data}"
+class MMTune
+
+  def initialize(path, pump_serial)
+    # Change these to 3 and 1 when pump is detuned by body (laying on it)
+    @rx_channel = 2
+    @tx_channel = 0
+    @rx_timeout_ms = 80
+    @pump_serial = pump_serial
+
+
+    puts "Opening #{path}"
+    @rf = MinimedRF::RFSpy.new(path)
+    @rf.sync
   end
+
+  def print_packet(p)
+    if p.nil?
+      puts "Nil packet!"
+    else
+      puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
+      #puts "raw: #{p.hex_data}"
+    end
+  end
+
+  def wakeup
+    # Try quick model check to see if pump is awake
+    awake = false
+    3.times do
+      @rf.send_packet("a7" + @pump_serial + "8d00", @tx_channel)
+      packet = @rf.get_packet(@rx_channel, 80)
+      if packet
+        print_packet(packet)
+        awake = true
+        break
+      end
+    end
+
+    if !awake
+      # Send 200 wake-up packets
+      @rf.send_packet("a7" + @pump_serial + "5d00", @tx_channel, 200)
+      wake_ack = @rf.get_packet(@rx_channel, 9000) # wait 9 s for response
+      if wake_ack
+        print_packet(wake_ack)
+      else
+        puts "Pump not responding"
+      end
+    end
+  end
+
+  def run_trial(var)
+    sample_size = 20
+    crc_error_count = 0
+    timeout_count = 0
+    valid_rssi_readings = []
+    sample_size.times do
+      @rf.send_packet("a7" + @pump_serial + "8d00", @tx_channel) # Get Model
+      packet = @rf.get_packet(@rx_channel, 80)
+      if packet.nil?
+        timeout_count += 1
+      elsif !packet.valid?
+        crc_error_count += 1
+      else
+        valid_rssi_readings << packet.rssi
+      end
+    end
+    avg_rssi = "0"
+    if valid_rssi_readings.length > 0
+      avg_rssi = valid_rssi_readings.inject{ |sum, el| sum + el }.to_f / valid_rssi_readings.size
+    end
+    puts "#{var}, #{timeout_count}, #{crc_error_count+timeout_count}, #{avg_rssi}"
+  end
+
+  def scan_over_freq
+    start_freq = 916.5 - 0.050
+    end_freq = 916.5 + 0.100
+    step_size = (end_freq - start_freq) / 50
+    cur_freq = start_freq
+    while cur_freq < end_freq
+      @rf.set_base_freq(cur_freq)
+      run_trial(cur_freq)
+      cur_freq += step_size
+    end
+  end
+
+  def scan_over_rx_bw
+    bw_bits = 0xf
+    while bw_bits > 0
+      new_val = 0x09 | (bw_bits << 4)  # 0x09 = 16kbs data rate
+      @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, new_val)
+      run_trial(bw_bits)
+      bw_bits -= 1
+    end
+  end
+
+  def scan_over_agc
+    agc = 0x0
+    while agc < 8
+      @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, agc)
+      run_trial(agc)
+      agc += 1
+    end
+  end
+
+  def calc_chanspc(ch_khz)
+    freq_div = (MinimedRF::RFSpy::FREQ_XTAL/(2**18).to_f)
+    vals = []
+    d = []
+    [0,1,2,3].each do |chanspc_m|
+      chanspc_m = (((ch_khz*1000)/freq_div)/(2**chanspc_m).to_f - 256).to_i & 0xff
+      vals << chanspc_m
+    end
+    puts "Vals = #{vals}"
+    vals.min_by { |chanspc_m|
+      ((ch_khz*1000) - freq_div * (256 + chanspc_m)*(2**chanspc_m)).abs
+    }
+  end
+
+  def run
+    # Set rx bw to 62.5kHz and 16kbs data rate
+    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0xd9)
+    # 916.568 when lying on the pump???
+    #@rf.set_base_freq(916.48)
+    #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
+    #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
+
+    puts "calc_chanspc(50.8) = #{calc_chanspc(50.8)}"
+
+    #scan_over_freq
+    #scan_over_rx_bw
+    #scan_over_agc
+  end
+
 end
 
-puts "Opening #{ARGV[0]}"
-rl = MinimedRF::SerialRL.new(ARGV[0])
-rl.sync
-
-# Change these to 3 and 1 when pump is detuned by body (laying on it)
-rx_channel = 2
-tx_channel = 0
-rx_timeout_ms = 80
-
-# Try quick model check to see if pump is awake
-awake = false
-3.times do
-  rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-  packet = rl.get_packet(rx_channel, 80)
-  if packet
-    print_packet(packet)
-    awake = true
-    break
-  end
-end
-
-if !awake
-  # Send 200 wake-up packets
-  rl.send_packet("a7" + pump_serial + "5d00", tx_channel, 200)
-  wake_ack = rl.get_packet(rx_channel, 9000) # wait 9 s for response
-  if wake_ack
-    print_packet(wake_ack)
-  else
-    puts "Pump not responding"
-  end
-end
-
-sample_size = 140
-success_count = 0
-
-# Run trial
-sample_size.times do
-  rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-  packet = rl.get_packet(rx_channel, 80)
-  if packet && packet.valid?
-    puts "Good!"
-    success_count += 1
-  else
-    print_packet(packet)
-  end
-end
-
-puts "Success rate: #{success_count.to_f / sample_size * 100}%"
+tune = MMTune.new(ARGV[0], ARGV[1])
+tune.run
