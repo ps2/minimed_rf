@@ -28,26 +28,43 @@ def print_packet(p)
 end
 
 puts "Opening #{ARGV[0]}"
-rl = MinimedRF::RFSpy.new(ARGV[0])
-rl.sync
+rf = MinimedRF::RFSpy.new(ARGV[0])
+rf.sync
 
-# Change these to 3 and 1 when pump is detuned by body (laying on it)
+if true # Customize radio params
+  # Set rx bw to 150kHz and 16kbs data rate
+  rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
+
+  # Pump in free space
+  #@rf.set_base_freq(916.485)
+  # Pump on body
+  #@rf.set_base_freq(916.598)
+  # Split the difference
+  rf.set_base_freq(916.541)
+
+  # Sometimes getting lower ber with 0x07 here (default is 0x03)
+  rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
+
+  # With rx bw > 101kzHZ, this should be 0xB6, otherwise 0x56
+  rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+end
+
 rx_channel = 2
 tx_channel = 0
 rx_timeout_ms = 80
 
 # Try quick model check to see if pump is awake
-rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-packet = rl.get_packet(rx_channel, 80)
+rf.send_packet("a7" + pump_serial + "8d00", tx_channel)
+packet = rf.get_packet(rx_channel, 80)
 if packet
   print_packet(packet)
   awake = true
 end
 
-if true #!awake
+if !awake
   # Send 200 wake-up packets
-  rl.send_packet("a7" + pump_serial + "5d00", tx_channel, 200)
-  wake_ack = rl.get_packet(rx_channel, 10000) # wait 10 s for response
+  rf.send_packet("a7" + pump_serial + "5d00", tx_channel, 200)
+  wake_ack = rf.get_packet(rx_channel, 10000) # wait 10 s for response
   if wake_ack
     print_packet(wake_ack)
   else
@@ -56,15 +73,15 @@ if true #!awake
   end
 
   # Get model
-  rl.send_packet("a7" + pump_serial + "8d00", tx_channel)
-  print_packet(rl.get_packet(rx_channel))
+  rf.send_packet("a7" + pump_serial + "8d00", tx_channel)
+  print_packet(rf.get_packet(rx_channel))
 end
 
 # Get history page
-rl.send_packet("a7" + pump_serial + "8000", tx_channel)
-print_packet(rl.get_packet(rx_channel, rx_timeout_ms))
-rl.send_packet("a7" + pump_serial + "8001" + "00" * 64, tx_channel)
+rf.send_packet("a7" + pump_serial + "8000", tx_channel)
+print_packet(rf.get_packet(rx_channel, rx_timeout_ms))
+rf.send_packet("a7" + pump_serial + "8001" + "00" * 64, tx_channel)
 16.times do
-  print_packet(rl.get_packet(rx_channel, rx_timeout_ms))
-  rl.send_packet("a7" + pump_serial + "0600", tx_channel)
+  print_packet(rf.get_packet(rx_channel, rx_timeout_ms))
+  rf.send_packet("a7" + pump_serial + "0600", tx_channel)
 end

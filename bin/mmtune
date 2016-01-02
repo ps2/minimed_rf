@@ -90,10 +90,8 @@ class MMTune
     puts "#{var}, #{timeout_count}, #{crc_error_count+timeout_count}, #{avg_rssi}"
   end
 
-  def scan_over_freq
-    start_freq = 916.5 - 0.050
-    end_freq = 916.5 + 0.100
-    step_size = (end_freq - start_freq) / 50
+  def scan_over_freq(start_freq, end_freq, steps)
+    step_size = (end_freq - start_freq) / steps
     cur_freq = start_freq
     while cur_freq < end_freq
       @rf.set_base_freq(cur_freq)
@@ -121,6 +119,14 @@ class MMTune
     end
   end
 
+  def scan_over_frend
+    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+    run_trial("0xb6")
+    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0x56)
+    run_trial("0x56")
+  end
+
+
   def calc_chanspc(ch_khz)
     freq_div = (MinimedRF::RFSpy::FREQ_XTAL/(2**18).to_f)
     vals = []
@@ -136,19 +142,40 @@ class MMTune
     return [vals.find_index(chanspc_m), chanspc_m]
   end
 
+  def scan_over_chanspc
+    chanspc_e, chanspc_m = calc_chanspc(200)
+    puts "calc_chanspc(200) = #{}"
+  end
+
   def run
-    # Set rx bw to 62.5kHz and 16kbs data rate
-    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0xd9)
-    # 916.568 when lying on the pump???
-    #@rf.set_base_freq(916.48)
-    #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
+
+    # Set rx bw to 150kHz and 16kbs data rate
+    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
+
+    # Pump in free space
+    #@rf.set_base_freq(916.485)
+    # Pump on body
+    #@rf.set_base_freq(916.598)
+    # Split the difference
+    @rf.set_base_freq(916.541)
+
+    # Sometimes getting lower ber with 0x07 here (default is 0x03)
+    @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
+
+    @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL1, 0x40)
+
+    # With rx bw > 101kzHZ, this should be 0xB6, otherwise 0x56
+    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+
+    # default (0x91) seems to work best
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
-    puts "calc_chanspc(200) = #{calc_chanspc(200)}"
+    wakeup
 
-    #scan_over_freq
+    #scan_over_freq(916.45, 916.55, 20)
     #scan_over_rx_bw
-    #scan_over_agc
+    scan_over_agc
+    #scan_over_frend
   end
 
 end
