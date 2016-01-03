@@ -5,7 +5,7 @@ module MinimedRF
     # a235053509349999990041
     def self.bit_blocks
       {
-        sequence: [0,8]
+        sequence: [1,7]
       }
     end
 

@@ -25,12 +25,11 @@ puts "Opening #{ARGV[0]}"
 rl = MinimedRF::RFSpy.new(ARGV[0])
 rl.sync
 while 1
-  packet = rl.get_packet(channel)
+  packet = rl.get_packet(channel, 30 * 1000)
   if packet
     puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % packet.rssi} (#{"%3d" % packet.sequence}): #{packet}"
     #puts "Raw: #{packet.hex_data}"
   else
-    puts "timeout"
-    exit
+    print "."
   end
 end

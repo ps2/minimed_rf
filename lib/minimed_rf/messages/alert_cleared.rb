@@ -20,7 +20,7 @@ module MinimedRF
     end
 
     def to_s
-      "DeviceLink: ##{sequence} #{alert_type}"
+      "AlertCleared: ##{sequence} #{alert_type}"
     end
   end
 end

@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+# This utility talks over a serial connection to a RileyLink that has been
+# loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
+
+# It attempts to enable mysentry packets on a minimed pump
+
+require 'minimed_rf'
+require 'minimed_rf/rfspy'
+
+if ARGV.length < 2 || ARGV[1].length != 6
+  puts "Usage: mmpair /dev/tty.usbserial-A9048LGG pumpserial"
+  if ARGV.length > 1 && ARGV[1].length != 6
+    puts "Error: pumpserial should be a six character id, like '55AB12'"
+  end
+  exit -1
+end
+
+pump_serial = ARGV[1]
+
+def log(msg)
+  puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{msg}"
+end
+
+def print_packet(p)
+  if p.nil?
+    puts "Nil packet!"
+  else
+    log "#{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
+    #puts "raw: #{p.hex_data}"
+  end
+end
+
+puts "Opening #{ARGV[0]}"
+rf = MinimedRF::RFSpy.new(ARGV[0])
+rf.sync
+
+rx_channel = 2
+tx_channel = 0
+rx_timeout_ms = 80
+counter = 0
+
+mock_mysentry_id = "d5770B"
+
+while
+
+  packet = rf.get_packet(rx_channel, 30 * 1000)
+  if packet
+    print_packet(packet)
+  end
+  # 04000000 a2 350535 06 02 d57708 00 09 000000 0f
+
+  if packet.to_message.is_a?(MinimedRF::FindDevice)
+    counter_hex = "%02x" % packet.to_message.sequence
+    message_type = "%02x" % packet.message_type
+    out = "a2" + pump_serial + "06" + counter_hex + mock_mysentry_id + "00" + message_type + "000000"
+    log "Sending #{out}"
+    rf.send_packet(out,  tx_channel)
+    counter += 1
+  end
+
+  if packet.to_message.is_a?(MinimedRF::DeviceLink)
+    counter_hex = "%02x" % packet.to_message.sequence
+    message_type = "%02x" % packet.message_type
+    out = "a2" + pump_serial + "06" + counter_hex + mock_mysentry_id + "00" + message_type + "000000"
+    log "Sending #{out}"
+    rf.send_packet(out,  tx_channel)
+    counter += 1
+    puts "Done!"
+  end
+
+end
