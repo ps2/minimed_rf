@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+# This utility talks over a serial connection to a RileyLink that has been
+# loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
+
+# It asks the cc1110 to listen for packets, receives them, decodes, and prints them out.
+
+# Must install the serialport gem to use this.
+
+require 'minimed_rf'
+require 'minimed_rf/rfspy'
+
+if ARGV.length < 1
+  puts "Usage: mmlisten /dev/tty.usbserial-A9048LGG [channel]"
+  exit -1
+end
+
+
+channel = 2
+if ARGV.length == 2
+  channel = ARGV[1].to_i
+end
+
+puts "Opening #{ARGV[0]}"
+rf = MinimedRF::RFSpy.new(ARGV[0])
+rf.sync
+while 1
+  packet = rf.send_packet("00",  channel)
+  sleep 1
+end

@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+# This utility talks over a serial connection to a RileyLink that has been
+# loaded with the subg_rfspy firmware (https://github.com/ps2/subg_rfspy)
+
+# Sends out FindDevice and DeviceLink packets, simulating a pump in Find Device
+# mode.
+
+require 'minimed_rf'
+require 'minimed_rf/rfspy'
+
+if ARGV.length < 2 || ARGV[1].length != 6
+  puts "Usage: mmpair /dev/tty.usbserial-A9048LGG pumpserial"
+  if ARGV.length > 1 && ARGV[1].length != 6
+    puts "Error: pumpserial should be a six character id, like '55AB12'"
+  end
+  exit -1
+end
+
+pump_serial = ARGV[1]
+
+def log(msg)
+  puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{msg}"
+end
+
+def print_packet(p)
+  if p.nil?
+    puts "Nil packet!"
+  else
+    log "#{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
+    #puts "raw: #{p.hex_data}"
+  end
+end
+
+puts "Opening #{ARGV[0]}"
+rf = MinimedRF::RFSpy.new(ARGV[0])
+rf.sync
+
+rx_channel = 0
+tx_channel = 2
+counter = 1;
+
+while
+  # a2 597055 09 9e 999999 01 fa
+  counter_hex = "%02x" % counter
+  find_device = "a2" + pump_serial + "09" + counter_hex + "99999900"
+
+  # Send copy 1 of FindDevice packet, listen 5 sec
+  log "Sending #{find_device}"
+  packet = rf.send_and_listen(find_device, tx_channel, 0, 0, rx_channel, 5000, 0)
+  fd_ack = packet.to_message rescue nil
+
+  if packet
+    print_packet(packet)
+  end
+
+  if (fd_ack && fd_ack.is_a?(MinimedRF::PumpStatusAck) &&
+    fd_ack.sequence == counter &&
+    fd_ack.response_type == 0x09)
+    log("Ok! got ack to 09")
+    counter += 1
+    counter_hex = "%02x" % counter
+    device_link = "a2" + pump_serial + "0a" + counter_hex + fd_ack.device_address + "00"
+    # Send copy 1 of DeviceLink packet, listen 5 sec
+    log "Sending #{device_link}"
+    packet = rf.send_and_listen(device_link, tx_channel, 0, 0, rx_channel, 5000, 0)
+    dl_ack = packet.to_message rescue nil
+    if dl_ack
+      print_packet(packet)
+    end
+    if (dl_ack && dl_ack.is_a?(MinimedRF::PumpStatusAck) &&
+      dl_ack.sequence == counter &&
+      dl_ack.response_type == 0x0a)
+      log("Ok! got ack to 0a")
+      puts "Device linked!"
+      exit
+    else
+      # Send copy 2 of DeviceLink packet, wait 100ms
+      device_link = "a2" + pump_serial + "0a" + counter_hex + fd_ack.device_address + "01"
+      log "Sending #{device_link}"
+      packet = rf.send_and_listen(device_link, tx_channel, 0, 0, rx_channel, 5000, 0)
+    end
+  else
+    # Send copy 2 of FindDevice packet, wait 100ms
+    find_device = "a2" + pump_serial + "09" + counter_hex + "99999901"
+    log "Sending #{find_device}"
+    packet = rf.send_and_listen(find_device, tx_channel, 0, 0, rx_channel, 100, 0)
+    counter += 1
+  end
+end

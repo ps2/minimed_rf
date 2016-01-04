@@ -5,6 +5,7 @@ module MinimedRF
     # a235053509349999990041
     def self.bit_blocks
       {
+        flag: [0,1],
         sequence: [1,7]
       }
     end
@@ -18,7 +19,7 @@ module MinimedRF
     end
 
     def to_s
-      "FindDevice: ##{sequence} #{broadcast_address}"
+      "FindDevice: #{b(:flag)} ##{sequence} #{broadcast_address}"
     end
   end
 end
