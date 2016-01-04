@@ -47,7 +47,7 @@ end
 
 def compare_to_decocare(records, file, model)
   #puts "Running: mm-decode-history-page.py --model=#{model} --collate #{file}"
-  output = `mm-decode-history-page.py --model=#{model} --collate #{file} | egrep -v '(^#|^.end)'`
+  output = `/usr/local/Cellar/python/2.7.11/Frameworks/Python.framework/Versions/2.7/bin/mm-decode-history-page.py --model=#{model} --collate #{file} | egrep -v '(^#|^.end)'`
   ## Decocare sorts most recent first
   d_records = JSON.parse(output).reverse
 
