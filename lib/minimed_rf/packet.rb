@@ -127,7 +127,7 @@ module MinimedRF
             MessageTypeMap[message_type].new(data[5..-2])
           end
         when 0xa5
-          MinimedRF::Meter.new(data[4..-2])
+          MinimedRF::Meter.new(data[0..-2])
         when 0xa6
           MinimedRF::Remote.new(data[0..-2])
         when 0xa8, 0xaa, 0xab

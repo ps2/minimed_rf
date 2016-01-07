@@ -28,7 +28,7 @@ module MinimedRF
     end
 
     def hex_str
-      [@bits].pack("B*").unpack("H*").first
+      @data.unpack("H*").first
     end
 
     def bit_blocks

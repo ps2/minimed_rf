@@ -14,7 +14,7 @@ module MinimedRF
       end
 
       def to_s
-        "ChangeBolusReminderTime #{timestamp_str} ??? #{data_str}"
+        "ChangeBolusReminderTime #{timestamp_str} ??? #{hex_str}"
       end
 
       def timestamp

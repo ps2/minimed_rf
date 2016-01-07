@@ -11,7 +11,7 @@ module MinimedRF
       end
 
       def device_id
-        data_str[18,6]
+        hex_str[18,6]
       end
 
       def to_s

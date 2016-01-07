@@ -11,7 +11,7 @@ module MinimedRF
         @data.getbyte(i)
       end
 
-      def data_str
+      def hex_str
         @data.unpack("H*").first
       end
 
@@ -60,7 +60,7 @@ module MinimedRF
       def as_json
         json = {
           _type: self.class.name.gsub(/^.*::/, ''),
-          _raw: data_str,
+          _raw: hex_str,
           description: to_s
         }
         t = timestamp
