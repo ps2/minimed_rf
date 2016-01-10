@@ -16,17 +16,23 @@ module MinimedRF
 
       def valid_date
         year, month, day = parse_date_2byte(1)
-        Date.new(year, month, day)
+        if year > 0 && month > 0 && day > 0
+          Date.new(year, month, day)
+        end
       end
 
       def valid_date_str
-        d = valid_date
-        sprintf("%04d-%02d-%02d", d.year, d.month, d.day)
+        if valid_date
+          d = valid_date
+          sprintf("%04d-%02d-%02d", d.year, d.month, d.day)
+        end
       end
 
       def timestamp
-        midnight = valid_date+1
-        [midnight.year, midnight.month, midnight.day, 0, 0, 0]
+        if valid_date
+          midnight = valid_date+1
+          [midnight.year, midnight.month, midnight.day, 0, 0, 0]
+        end
       end
 
       def as_json
