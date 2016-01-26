@@ -137,6 +137,11 @@ module MinimedRF
       response_to_packet(data)
     end
 
+    def print_and_flush(str)
+      print str
+      $stdout.flush
+    end
+
     def sync
       while 1
         send_command(CMD_GET_STATE)
