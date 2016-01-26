@@ -157,7 +157,8 @@ class MMTune
     # Pump on body
     #@rf.set_base_freq(916.598)
     # Split the difference
-    @rf.set_base_freq(916.541)
+    #@rf.set_base_freq(916.541)
+    @rf.set_base_freq(916.480)
 
     # Sometimes getting lower ber with 0x07 here (default is 0x03)
     @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
@@ -171,10 +172,13 @@ class MMTune
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
     wakeup
+    wakeup
+    wakeup
 
-    #scan_over_freq(916.45, 916.55, 20)
+    scan_over_freq(916.46, 916.50, 5)
+    @rf.set_base_freq(916.480)
     #scan_over_rx_bw
-    scan_over_agc
+    #scan_over_agc
     #scan_over_frend
   end
 
