@@ -21,12 +21,10 @@ pump_serial = ARGV[1]
 class MMTune
 
   def initialize(path, pump_serial)
-    # Change these to 3 and 1 when pump is detuned by body (laying on it)
     @rx_channel = 0
     @tx_channel = 0
     @rx_timeout_ms = 80
     @pump_serial = pump_serial
-
 
     puts "Opening #{path}"
     @rf = MinimedRF::RFSpy.new(path)
@@ -95,7 +93,7 @@ class MMTune
     cur_freq = start_freq
     while cur_freq < end_freq
       @rf.set_base_freq(cur_freq)
-      run_trial(cur_freq)
+      run_trial("%0.3f" % cur_freq)
       cur_freq += step_size
     end
   end
@@ -155,19 +153,12 @@ class MMTune
   end
 
 
-
-
   def run
 
     # Set rx bw to 150kHz and 16kbs data rate
     @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
 
     # Pump in free space
-    #@rf.set_base_freq(916.485)
-    # Pump on body
-    @rf.set_base_freq(916.598)
-    # Split the difference
-    #@rf.set_base_freq(916.541)
     @rf.set_base_freq(916.630)
 
     # Sometimes getting lower ber with 0x07 here (default is 0x03)
@@ -182,15 +173,15 @@ class MMTune
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
     wakeup
-    wakeup
-    wakeup
 
-    scan_over_freq(916.55, 916.75, 5)
-    @rf.set_base_freq(916.630)
+    scan_over_freq(916.45, 916.75, 10)
+
     #do_rxtx_spacing_test
     #scan_over_rx_bw
     #scan_over_agc
     #scan_over_frend
+
+    @rf.set_base_freq(916.630)
   end
 
 end
