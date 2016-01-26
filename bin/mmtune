@@ -174,7 +174,7 @@ class MMTune
 
     wakeup
 
-    scan_over_freq(916.45, 916.75, 10)
+    scan_over_freq(916.45, 916.75, 5)
 
     #do_rxtx_spacing_test
     #scan_over_rx_bw
