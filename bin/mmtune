@@ -68,7 +68,7 @@ class MMTune
   end
 
   def run_trial(var)
-    sample_size = 20
+    sample_size = 5
     crc_error_count = 0
     timeout_count = 0
     valid_rssi_readings = []
@@ -83,11 +83,11 @@ class MMTune
         valid_rssi_readings << packet.rssi
       end
     end
-    avg_rssi = "0"
+    avg_rssi = 0
     if valid_rssi_readings.length > 0
       avg_rssi = valid_rssi_readings.inject{ |sum, el| sum + el }.to_f / valid_rssi_readings.size
     end
-    puts "#{var}, #{timeout_count}, #{crc_error_count+timeout_count}, #{avg_rssi}"
+    puts "#{var}, #{timeout_count}, #{crc_error_count+timeout_count}, rssi:%0.1f" % avg_rssi
   end
 
   def scan_over_freq(start_freq, end_freq, steps)
@@ -126,26 +126,36 @@ class MMTune
     run_trial("0x56")
   end
 
-
-  def calc_chanspc(ch_khz)
-    freq_div = (MinimedRF::RFSpy::FREQ_XTAL/(2**18).to_f)
-    vals = []
-    d = []
-    [0,1,2,3].each do |chanspc_m|
-      chanspc_m = (((ch_khz*1000)/freq_div)/(2**chanspc_m).to_f - 256).to_i & 0xff
-      vals << chanspc_m
+  def scan_over_rx_freq(range, base_freq, chanspc)
+    range.each do |ch|
+      @rx_channel = ch
+      rx_freq = base_freq + ch * chanspc
+      run_trial("rx%02d %0.2f" % [ch, rx_freq])
     end
-    puts "Vals = #{vals}"
-    chanspc_m = vals.min_by { |chanspc_m|
-      ((ch_khz*1000) - freq_div * (256 + chanspc_m)*(2**chanspc_m)).abs
-    }
-    return [vals.find_index(chanspc_m), chanspc_m]
   end
 
-  def scan_over_chanspc
-    chanspc_e, chanspc_m = calc_chanspc(200)
-    puts "calc_chanspc(200) = #{}"
+  def scan_over_tx_freq(range, base_freq, chanspc)
+    range.each do |ch|
+      @tx_channel = ch
+      tx_freq = base_freq + ch * chanspc
+      run_trial("tx%02d %0.2f" % [ch, tx_freq])
+    end
   end
+
+  def do_rxtx_spacing_test
+    base_freq = 916.3
+    chanspc = 30
+    @rf.set_base_freq(base_freq)
+    @rf.set_channel_spacing(chanspc,0x61) # 30 kHz
+    @tx_channel = 11 # 916.63
+    scan_over_rx_freq(0..20,base_freq,chanspc/1000.0)
+    puts "="*30
+    @rx_channel = 11 # 916.63
+    scan_over_tx_freq(0..20,base_freq,chanspc/1000.0)
+  end
+
+
+
 
   def run
 
@@ -155,9 +165,9 @@ class MMTune
     # Pump in free space
     #@rf.set_base_freq(916.485)
     # Pump on body
-    #@rf.set_base_freq(916.598)
+    @rf.set_base_freq(916.598)
     # Split the difference
-    @rf.set_base_freq(916.541)
+    #@rf.set_base_freq(916.57)
 
     # Sometimes getting lower ber with 0x07 here (default is 0x03)
     @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
@@ -172,9 +182,10 @@ class MMTune
 
     wakeup
 
-    #scan_over_freq(916.45, 916.55, 20)
+    do_rxtx_spacing_test
+    #scan_over_freq(916.4, 916.7, 20)
     #scan_over_rx_bw
-    scan_over_agc
+    #scan_over_agc
     #scan_over_frend
   end
 

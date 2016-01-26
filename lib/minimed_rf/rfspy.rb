@@ -48,6 +48,27 @@ module MinimedRF
       update_register(REG_FREQ2, (val >> 16) & 0xff)
     end
 
+    def set_channel_spacing(ch_khz, existing_mdmcfg1)
+      chanspc_e, chanspc_m = calc_chanspc(ch_khz)
+      update_register(REG_MDMCFG1, existing_mdmcfg1 & 0b11111100 | chanspc_e)
+      update_register(REG_MDMCFG0, chanspc_m)
+    end
+
+    def calc_chanspc(ch_khz)
+      freq_div = (MinimedRF::RFSpy::FREQ_XTAL/(2**18).to_f)
+      vals = []
+      d = []
+      [0,1,2,3].each do |chanspc_e|
+        chanspc_m = ((ch_khz*1000)/(freq_div * 2**chanspc_e) - 256).round;
+        if chanspc_m >= 0 && chanspc_m < 256
+          return chanspc_e, chanspc_m
+        end
+      end
+      raise "#{ch_khz}kHz out of range for CHANSPC"
+    end
+
+
+
     def do_command(command, param="")
       send_command(command, param)
       get_response
