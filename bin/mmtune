@@ -155,8 +155,8 @@ class MMTune
 
   def run
 
-    # Set rx bw to 150kHz and 16kbs data rate
-    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
+    # Set rx bw to 75kHz and 16kbs data rate
+    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0xd9)
 
     # Pump in free space
     @rf.set_base_freq(916.630)
@@ -167,14 +167,14 @@ class MMTune
     @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL1, 0x40)
 
     # With rx bw > 101kzHZ, this should be 0xB6, otherwise 0x56
-    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0x56)
 
     # default (0x91) seems to work best
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
     wakeup
 
-    scan_over_freq(916.45, 916.75, 10)
+    scan_over_freq(916.65, 916.9, 20)
 
     #do_rxtx_spacing_test
     #scan_over_rx_bw

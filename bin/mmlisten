@@ -16,7 +16,7 @@ if ARGV.length < 1
 end
 
 
-channel = 2
+channel = 0
 if ARGV.length == 2
   channel = ARGV[1].to_i
 end
@@ -24,6 +24,11 @@ end
 puts "Opening #{ARGV[0]}"
 rl = MinimedRF::RFSpy.new(ARGV[0])
 rl.sync
+rl.set_base_freq(916.630)
+# wide rx filter
+rl.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x19)
+rl.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+
 while 1
   packet = rl.get_packet(channel, 30 * 1000)
   if packet

@@ -33,23 +33,18 @@ rf.sync
 
 if true # Customize radio params
   # Set rx bw to 150kHz and 16kbs data rate
-  rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
+  rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0xd9)
 
-  # Pump in free space
-  #@rf.set_base_freq(916.485)
-  # Pump on body
-  #@rf.set_base_freq(916.598)
-  # Split the difference
-  rf.set_base_freq(916.541)
+  rf.set_base_freq(916.763)
 
   # Sometimes getting lower ber with 0x07 here (default is 0x03)
   rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL2, 0x07)
 
   # With rx bw > 101kzHZ, this should be 0xB6, otherwise 0x56
-  rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+  rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0x56)
 end
 
-rx_channel = 2
+rx_channel = 0
 tx_channel = 0
 rx_timeout_ms = 80
 
