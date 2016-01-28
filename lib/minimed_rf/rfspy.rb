@@ -29,10 +29,18 @@ module MinimedRF
     def initialize(path)
       @ser = SerialPort.new path
       @ser.baud = 19200
-      @ser.flow_control = SerialPort::HARD
+      @ser.flow_control = rts_cts_flag
       # Non-blocking read
       @ser.read_timeout = -1
       @buf = ""
+    end
+
+    def rts_cts_flag
+      if !ENV.has_key?('RFSPY_RTSCTS') || ENV['RFSPY_RTSCTS'].to_i == 1
+        SerialPort::HARD
+      else
+        SerialPort::NONE
+      end
     end
 
     def update_register(reg, value)
