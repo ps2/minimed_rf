@@ -93,6 +93,15 @@ ruby -I lib bin/mmdecode ab29595959655743a5d31c7254ec4b54e55a54b555d0dd0e5555716
 a2 597055 PumpStatus: #101 2014-08-11 18:14:00 -0500 - Glucose=154 PreviousGlucose=156 ActiveInsulin=1.975
 ```
 
+# Flow control
+
+If you're using a device that doesn't have flow control (like the ERF stick), set the appropriate environment variable before use:
+
+```
+export RFSPY_RTSCTS=0
+ruby -I lib bin/mmtune /dev/ttyMFD1 123123
+```
+
 ## Thanks
 
 Thanks to @bewest and @loudnate and others who have provided many insights into the Minimed protocols. Much of the pump-specific knowledge has been figured out by @bewest in his [decoding-carelink](https://github.com/bewest/decoding-carelink) repository.
