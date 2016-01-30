@@ -47,7 +47,7 @@ PA_TABLE1 = 0x57; // pa power setting 0 dBm
 
 ## data encoding
 
-The data is encoded using an odd 6-bit code to 4-bit hex character encoding. This took me a long time to work out. I couldn't find anything like it out there. Someone let me know if there is a name for this kind of encoding.
+The data is encoded using an encoding called 4b6b. It looks like this:
 
 ```ruby
     "010101" => "0",
