@@ -47,7 +47,7 @@ PA_TABLE1 = 0x57; // pa power setting 0 dBm
 
 ## data encoding
 
-The data is encoded using an odd 6-bit code to 4-bit hex character encoding. This took me a long time to work out. I couldn't find anything like it out there. Someone let me know if there is a name for this kind of encoding.
+The data is encoded using an encoding called 4b6b. It looks like this:
 
 ```ruby
     "010101" => "0",
@@ -91,6 +91,15 @@ ruby -I lib bin/mmdecode <packetdata>
 ```
 ruby -I lib bin/mmdecode ab29595959655743a5d31c7254ec4b54e55a54b555d0dd0e5555716aa563571566c9ac7258e565574555d1c55555555568bc7256c55554e55a54b55555556c55
 a2 597055 PumpStatus: #101 2014-08-11 18:14:00 -0500 - Glucose=154 PreviousGlucose=156 ActiveInsulin=1.975
+```
+
+# Flow control
+
+If you're using a device that doesn't have flow control (like the ERF stick), set the appropriate environment variable before use:
+
+```
+export RFSPY_RTSCTS=0
+ruby -I lib bin/mmtune /dev/ttyMFD1 123123
 ```
 
 ## Thanks

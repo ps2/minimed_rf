@@ -67,6 +67,7 @@ class MMTune
 
   def run_trial(var)
     sample_size = 5
+    success_count = 0
     crc_error_count = 0
     timeout_count = 0
     valid_rssi_readings = []
@@ -78,24 +79,32 @@ class MMTune
       elsif !packet.valid?
         crc_error_count += 1
       else
+        success_count += 1
         valid_rssi_readings << packet.rssi
       end
     end
-    avg_rssi = 0
+    avg_rssi = -99
     if valid_rssi_readings.length > 0
       avg_rssi = valid_rssi_readings.inject{ |sum, el| sum + el }.to_f / valid_rssi_readings.size
     end
     puts "#{var}, #{timeout_count}, #{crc_error_count+timeout_count}, rssi:%0.1f" % avg_rssi
+    return [var, success_count, avg_rssi]
+  end
+
+  def continuous_trial
+    loop { run_trial(".") }
   end
 
   def scan_over_freq(start_freq, end_freq, steps)
     step_size = (end_freq - start_freq) / steps
     cur_freq = start_freq
+    results = []
     while cur_freq < end_freq
       @rf.set_base_freq(cur_freq)
-      run_trial("%0.3f" % cur_freq)
+      results << run_trial("%0.3f" % cur_freq)
       cur_freq += step_size
     end
+    results.sort_by { |r| r[1..2]}.reverse
   end
 
   def scan_over_rx_bw
@@ -155,8 +164,8 @@ class MMTune
 
   def run
 
-    # Set rx bw to 150kHz and 16kbs data rate
-    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0x99)
+    # Set rx bw to 75kHz and 16kbs data rate
+    @rf.update_register(MinimedRF::RFSpy::REG_MDMCFG4, 0xd9)
 
     # Pump in free space
     @rf.set_base_freq(916.630)
@@ -167,21 +176,28 @@ class MMTune
     @rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL1, 0x40)
 
     # With rx bw > 101kzHZ, this should be 0xB6, otherwise 0x56
-    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0xB6)
+    @rf.update_register(MinimedRF::RFSpy::REG_FREND1, 0x56)
 
     # default (0x91) seems to work best
     #@rf.update_register(MinimedRF::RFSpy::REG_AGCCTRL0, 0x91)
 
     wakeup
 
-    scan_over_freq(916.45, 916.75, 5)
+    results = scan_over_freq(916.5, 916.9, 20)
+    if results[0][1] > 0
+      puts "Setting to best freq of #{results[0][0]}"
+      best = results[0][0].to_f
+      @rf.set_base_freq(best)
+      #continuous_trial
+    else
+      @rf.set_base_freq(916.630)
+    end
 
     #do_rxtx_spacing_test
     #scan_over_rx_bw
     #scan_over_agc
     #scan_over_frend
 
-    @rf.set_base_freq(916.630)
   end
 
 end
