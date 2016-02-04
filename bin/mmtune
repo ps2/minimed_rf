@@ -183,7 +183,7 @@ class MMTune
 
     wakeup
 
-    results = scan_over_freq(916.5, 916.9, 20)
+    results = scan_over_freq(916.55, 916.75, 10)
     if results[0][1] > 0
       puts "Setting to best freq of #{results[0][0]}"
       best = results[0][0].to_f
