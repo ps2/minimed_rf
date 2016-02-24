@@ -11,7 +11,7 @@ require 'tempfile'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: decode_history_page [options] [hexdata]"
+  opts.banner = "Usage: mmhistory [options] [hexdata]"
 
   opts.on("-d", "--diff-with-decocare", "Compare output to decocare") do |v|
     options[:diff] = true
@@ -21,6 +21,10 @@ OptionParser.new do |opts|
   end
   opts.on("-p", "--pump=model", "Specify pump model. 522, 551, etc.") do |v|
     options[:model] = v
+  end
+  opts.on('-h', '--help', 'Displays Help') do
+    puts opts
+    exit
   end
 end.parse!
 
@@ -58,6 +62,11 @@ def compare_to_decocare(records, file, model)
   d_records.each_with_index do |dr, i|
     r = records[i]
     ctx = "record[#{i}]"
+
+    if r.nil?
+      puts "minimed_rf record = nil, decocare = #{dr.inspect}"
+      next
+    end
 
     # Compare type
     next unless compare_attr(ctx, dr["_type"], map_type_to_decocare_type(r["_type"]), "_type")
@@ -128,7 +137,7 @@ else
   if ARGV.length > 0
     data = [ARGV[0]].pack('H*')
   else
-    puts "Usage: mmhistory datafile pumpmodel"
+    puts "Usage: mmhistory [options] [hexdata]"
     exit -1
   end
 end
