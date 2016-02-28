@@ -75,8 +75,12 @@ module MinimedRF
         :meter_bg_now
       when 2
         :weak_signal
+      when 3
+        :calibration_error
       when 4
         :sensor_warmup
+      when 5
+        :sensor_ended
       when 7
         :high_bg # Above 400
       when 10
@@ -129,8 +133,12 @@ module MinimedRF
         val << "Meter BG Now - PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs"
       when :weak_signal
         val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs"
+      when :calibration_error
+        val << "Calibration Error - SensorAge=#{sensor_age}hrs"
       when :sensor_warmup
         val << "Sensor Warmup"
+      when :sensor_ended
+        val << "Sensor Ended"
       when :sensor_lost
         val << "Sensor Lost"
       when :high_bg
@@ -144,7 +152,7 @@ module MinimedRF
       if active_insulin > 0
         val << " ActiveInsulin=#{active_insulin.round(3)}"
       end
-      
+
       unless trend.empty?
         val << " Trend=#{trend}"
       end
