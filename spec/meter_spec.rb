@@ -16,5 +16,12 @@ describe MinimedRF::Meter do
     expect(message.glucose).to eq 398
   end
 
+  it "should decode fields when bg above 255" do
+    hex_data = "a5c527ad018e77"
+    packet = MinimedRF::Packet.from_hex(hex_data)
+    message = packet.to_message
+    expect(message.is_ack?).to eq false
+  end
+
 
 end
