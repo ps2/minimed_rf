@@ -15,15 +15,21 @@ module MinimedRF
       end
 
       def to_s
-        "ChangeTempBasalType #{timestamp_str} type:#{enabled.inspect} "
+        "ChangeTempBasalType #{timestamp_str} type:#{basal_type} "
       end
 
-      def enabled
+      def basal_type
         d(1) == 1 ? "percent" : "absolute"
       end
 
       def timestamp
         parse_date(2)
+      end
+
+      def as_json
+        super.merge({
+          temp: basal_type,
+        })
       end
 
     end
