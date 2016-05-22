@@ -70,7 +70,6 @@ module MinimedRF
     '554' => Model554,
     '722' => Model722,
     '723' => Model723,
-    '723' => Model723,
     '730' => Model730,
     '740' => Model740,
     '751' => Model751,

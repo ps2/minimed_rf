@@ -28,13 +28,13 @@ module MinimedRF
       entries = []
       skipped = ""
       unabsorbed_insulin_record = nil
+      offset = 0
 
       while (data && data.size > 0) do
         event = match(date_range)
         if event
           unless skipped.empty?
-            return entries
-            if true
+            if print
               puts "************************************************************** Skipped: " + skipped
             end
             skipped = ""
@@ -51,11 +51,16 @@ module MinimedRF
           else
             entries << event
           end
+          puts "Offset = #{offset}, block = #{event.bytesize}, type = 0x#{data.getbyte(0).to_s(16)}"
+          offset += event.bytesize
           @data = @data.byteslice((event.bytesize)..-1)
         else
-          #if data.getbyte(0) != 0
-          #  raise "Unknown history record type: 0x#{"%02x" % data.getbyte(0)}"
-          #end
+          if data.getbyte(0) != 0
+            print "Unknown history record type: 0x#{"%02x" % data.getbyte(0)}"
+            return entries
+          end
+          puts "Skipping: Offset = #{offset}"
+          offset += 1
           skipped << "%02x" % data.getbyte(0)
           @data = @data.byteslice(1..-1)
         end
