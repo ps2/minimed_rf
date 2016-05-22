@@ -33,7 +33,8 @@ module MinimedRF
         event = match(date_range)
         if event
           unless skipped.empty?
-            if print
+            return entries
+            if true
               puts "************************************************************** Skipped: " + skipped
             end
             skipped = ""
@@ -52,6 +53,9 @@ module MinimedRF
           end
           @data = @data.byteslice((event.bytesize)..-1)
         else
+          #if data.getbyte(0) != 0
+          #  raise "Unknown history record type: 0x#{"%02x" % data.getbyte(0)}"
+          #end
           skipped << "%02x" % data.getbyte(0)
           @data = @data.byteslice(1..-1)
         end
