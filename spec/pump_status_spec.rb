@@ -73,4 +73,9 @@ describe MinimedRF::PumpStatus do
     expect(message.battery_pct).to eq 75
   end
 
+  it "should decode clock_type" do
+    hex_data = "d5971f1510070a013f3a0002dd020105bd08880825000502000755171e0010070a00008d"
+    message = MinimedRF::PumpStatus.from_hex(hex_data)
+    expect(message.clock_type).to eq :clock_type_24hr
+  end
 end

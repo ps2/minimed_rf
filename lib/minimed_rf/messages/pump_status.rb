@@ -5,6 +5,7 @@ module MinimedRF
       {
         sequence: [1,7],
         trend: [12,3],
+        clock_type: [16,1],
         pump_hour: [19,5],
         pump_minute: [26,6],
         pump_second: [34,6],
@@ -32,6 +33,17 @@ module MinimedRF
         sensor_month: [260, 4],
         sensor_day: [267,5]
       }
+    end
+
+    def clock_type
+      b(:clock_type) ? :clock_type_24hr : :clock_type_12hr
+    end
+
+    def clock_type_str
+      {
+        clock_type_12hr: "12 hr",
+        clock_type_24hr: "24 hr"
+      }[clock_type]
     end
 
     def pump_timestamp
@@ -124,7 +136,7 @@ module MinimedRF
     end
 
     def to_s
-      val = "PumpStatus: ##{sequence} #{pump_timestamp} #{sensor_timestamp} - "
+      val = "PumpStatus: ##{sequence} (#{clock_type_str}) #{pump_timestamp} #{sensor_timestamp} - "
 
       case sensor_status
       when :sensor_missing
