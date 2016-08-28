@@ -23,7 +23,11 @@ module MinimedRF
       end
 
       def bytesize
-        144
+        if @pump_model.larger
+          144
+        else
+          124
+        end
       end
 
       def to_s
