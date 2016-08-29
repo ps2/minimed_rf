@@ -62,7 +62,7 @@ module MinimedRF
       end
 
       def to_s
-        "RestoreMystery55 #{timestamp_str}"
+        "RestoreMystery54 #{timestamp_str}"
       end
 
       def timestamp
