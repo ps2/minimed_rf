@@ -49,6 +49,30 @@ module MinimedRF
   end
 end
 
+module MinimedRF
+  module PumpEvents
+    class RestoreMystery53 < Base
+      def self.event_type_code
+        0x53
+      end
+
+      def bytesize
+        7
+      end
+
+      def to_s
+        "RestoreMystery53 #{timestamp_str}"
+      end
+
+      def timestamp
+        parse_date(2)
+      end
+
+    end
+  end
+end
+
+
 # 54fca71d209c10fffcff00e65000ffff00ffff00ffff00ffff00ffff00ffff00fffffcfffcff00f05000ffff00ffff00ffff00ffff00ffff00ffff00ffff
 module MinimedRF
   module PumpEvents
