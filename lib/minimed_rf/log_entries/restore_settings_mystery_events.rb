@@ -5,30 +5,7 @@
 
 module MinimedRF
   module PumpEvents
-    class Unknown < Base
-      def self.event_type_code
-        0x52
-      end
-
-      def bytesize
-        7
-      end
-
-      def to_s
-        "Unknown #{timestamp_str}"
-      end
-
-      def timestamp
-        parse_date(2)
-      end
-
-    end
-  end
-end
-
-module MinimedRF
-  module PumpEvents
-    class Unknown2 < Base
+    class RestoreMystery51 < Base
       def self.event_type_code
         0x51
       end
@@ -38,7 +15,7 @@ module MinimedRF
       end
 
       def to_s
-        "Unknown2 #{timestamp_str}"
+        "RestoreMystery51 #{timestamp_str}"
       end
 
       def timestamp
@@ -49,20 +26,19 @@ module MinimedRF
   end
 end
 
-# 5511a71d809c10000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff56
 module MinimedRF
   module PumpEvents
-    class Unknown3 < Base
+    class RestoreMystery52 < Base
       def self.event_type_code
-        0x55
+        0x52
       end
 
       def bytesize
-        55
+        7
       end
 
       def to_s
-        "Unknown3 #{timestamp_str}"
+        "RestoreMystery52 #{timestamp_str}"
       end
 
       def timestamp
@@ -76,7 +52,7 @@ end
 # 54fca71d209c10fffcff00e65000ffff00ffff00ffff00ffff00ffff00ffff00fffffcfffcff00f05000ffff00ffff00ffff00ffff00ffff00ffff00ffff
 module MinimedRF
   module PumpEvents
-    class Unknown4 < Base
+    class RestoreMystery54 < Base
       def self.event_type_code
         0x54
       end
@@ -86,7 +62,7 @@ module MinimedRF
       end
 
       def to_s
-        "Unknown4 #{timestamp_str}"
+        "RestoreMystery55 #{timestamp_str}"
       end
 
       def timestamp
@@ -97,42 +73,20 @@ module MinimedRF
   end
 end
 
+# 5511a71d809c10000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff56
 module MinimedRF
   module PumpEvents
-    class Unknown5 < Base
+    class RestoreMystery55 < Base
       def self.event_type_code
-        0x1b
+        0x55
       end
 
       def bytesize
-        7
+        55
       end
 
       def to_s
-        "Unknown5 #{timestamp_str}"
-      end
-
-      def timestamp
-        parse_date(2)
-      end
-
-    end
-  end
-end
-
-module MinimedRF
-  module PumpEvents
-    class Unknown6 < Base
-      def self.event_type_code
-        0x2d
-      end
-
-      def bytesize
-        7
-      end
-
-      def to_s
-        "Unknown6 #{timestamp_str}"
+        "RestoreMystery55 #{timestamp_str}"
       end
 
       def timestamp
