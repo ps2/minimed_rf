@@ -1,10 +1,48 @@
 module MinimedRF
   module PumpEvents
 
-    # Got this from @bewest's decocare
-    # https://github.com/bewest/decoding-carelink/blob/master/decocare/history.py#L673-L684
+    class DailyTotal515 < Base
 
-    class Sara6E < Base
+      def self.event_type_code
+        0x6c
+      end
+
+      def bytesize
+        38
+      end
+
+      def timestamp
+        parse_date_2byte(1)
+      end
+
+      def to_s
+        "DailyTotal515 #{timestamp_str}"
+      end
+
+    end
+
+    class DailyTotal522 < Base
+
+      def self.event_type_code
+        0x6d
+      end
+
+      def bytesize
+        44
+      end
+
+      def timestamp
+        parse_date_2byte(2)
+      end
+
+      def to_s
+        "DailyTotal522 #{timestamp_str}"
+      end
+
+    end
+
+
+    class DailyTotal523 < Base
 
       def self.event_type_code
         0x6e
@@ -42,9 +80,10 @@ module MinimedRF
       end
 
       def to_s
-        "Sara6E #{timestamp_str}"
+        "DailyTotal523 #{timestamp_str}"
       end
 
     end
+
   end
 end

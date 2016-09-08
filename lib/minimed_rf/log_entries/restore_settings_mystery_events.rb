@@ -23,11 +23,7 @@ module MinimedRF
       end
 
     end
-  end
-end
 
-module MinimedRF
-  module PumpEvents
     class RestoreMystery52 < Base
       def self.event_type_code
         0x52
@@ -46,11 +42,7 @@ module MinimedRF
       end
 
     end
-  end
-end
 
-module MinimedRF
-  module PumpEvents
     class RestoreMystery53 < Base
       def self.event_type_code
         0x53
@@ -69,13 +61,8 @@ module MinimedRF
       end
 
     end
-  end
-end
 
-
-# 54fca71d209c10fffcff00e65000ffff00ffff00ffff00ffff00ffff00ffff00fffffcfffcff00f05000ffff00ffff00ffff00ffff00ffff00ffff00ffff
-module MinimedRF
-  module PumpEvents
+    # 54fca71d209c10fffcff00e65000ffff00ffff00ffff00ffff00ffff00ffff00fffffcfffcff00f05000ffff00ffff00ffff00ffff00ffff00ffff00ffff
     class RestoreMystery54 < Base
       def self.event_type_code
         0x54
@@ -94,12 +81,8 @@ module MinimedRF
       end
 
     end
-  end
-end
 
-# 5511a71d809c10000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff56
-module MinimedRF
-  module PumpEvents
+    # 5511a71d809c10000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff000f0f00ffff00ffff00ffff00ffff00ffff00ffff00ffff56
     class RestoreMystery55 < Base
       def self.event_type_code
         0x55
@@ -118,11 +101,7 @@ module MinimedRF
       end
 
     end
-  end
-end
 
-module MinimedRF
-  module PumpEvents
     class RestoreMystery69 < Base
       def self.event_type_code
         0x69
@@ -141,5 +120,6 @@ module MinimedRF
       end
 
     end
+
   end
 end
