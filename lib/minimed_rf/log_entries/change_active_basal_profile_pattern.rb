@@ -1,17 +1,18 @@
+# 1F20 763612030E
 
 module MinimedRF
   module PumpEvents
-    class ChangeBolusWizardSetup < Base
+    class ChangeActiveBasalProfilePattern < Base
       def self.event_type_code
-        0x4f
+        0x14
       end
 
       def bytesize
-        39
+        7
       end
 
       def to_s
-        "ChangeBolusWizardSetup #{timestamp_str}"
+        "ChangeActiveBasalProfilePattern #{timestamp_str}"
       end
 
       def timestamp

@@ -24,7 +24,7 @@ module MinimedRF
     REG_FREND1 = 0x1A
     REG_FREND0 = 0x1B
 
-    FREQ_XTAL = 24000000
+    FREQ_XTAL = (ENV["RILEYLINK_XTAL_FREQ"] || 24000000).to_i
 
     def initialize(path)
       @ser = SerialPort.new path
@@ -122,7 +122,7 @@ module MinimedRF
     end
 
     def get_packet(channel, timeout = 0)
-      args = [channel, timeout >> 8, timeout].pack("c*")
+      args = [channel, timeout >> 24, (timeout >> 16) & 0xff, (timeout >> 8) & 0xff, timeout & 0xff].pack("c*")
       data = do_command(CMD_GET_PACKET, args)
       #puts "#{Time.now.strftime('%H:%M:%S.%3N')} Raw data: #{data.unpack("H*")}"
       response_to_packet(data)
@@ -140,7 +140,7 @@ module MinimedRF
     def send_and_listen(data, send_channel, repeat, delay_ms, listen_channel, timeout, retry_count)
       p = MinimedRF::Packet.from_hex_without_crc(data)
       encoded = [p.encode].pack('H*')
-      prefix = [send_channel, repeat, delay_ms, listen_channel, timeout >> 8, timeout, retry_count].pack("c*")
+      prefix = [send_channel, repeat, delay_ms, listen_channel, timeout >> 24, (timeout >> 16) & 0xff, (timeout >> 8) & 0xff, timeout & 0xff, retry_count].pack("c*")
       data = do_command(CMD_SEND_AND_LISTEN, prefix + encoded)
       response_to_packet(data)
     end

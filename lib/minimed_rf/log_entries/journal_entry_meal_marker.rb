@@ -2,24 +2,24 @@ module MinimedRF
   module PumpEvents
 
     # Got this from @bewest's decocare
-    # https://github.com/bewest/decoding-carelink/blob/master/decocare/history.py
+    # https://github.com/bewest/decoding-carelink
 
-    class Model522ResultTotals < Base
+    class JournalEntryMealMarker < Base
 
       def self.event_type_code
-        0x6d
+        0x40
       end
 
       def bytesize
-        44
+        9
       end
 
       def timestamp
-        parse_date_2byte(2)
+        parse_date(2)
       end
 
       def to_s
-        "Model522ResultTotals #{timestamp_str}"
+        "JournalEntryMealMarker #{timestamp_str}"
       end
 
     end

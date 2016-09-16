@@ -5,6 +5,7 @@ module MinimedRF
       {
         sequence: [1,7],
         trend: [12,3],
+        clock_type: [16,1],
         pump_hour: [19,5],
         pump_minute: [26,6],
         pump_second: [34,6],
@@ -32,6 +33,17 @@ module MinimedRF
         sensor_month: [260, 4],
         sensor_day: [267,5]
       }
+    end
+
+    def clock_type
+      b(:clock_type) ? :clock_type_24hr : :clock_type_12hr
+    end
+
+    def clock_type_str
+      {
+        clock_type_12hr: "12 hr",
+        clock_type_24hr: "24 hr"
+      }[clock_type]
     end
 
     def pump_timestamp
@@ -75,8 +87,12 @@ module MinimedRF
         :meter_bg_now
       when 2
         :weak_signal
+      when 3
+        :calibration_error
       when 4
         :sensor_warmup
+      when 5
+        :sensor_ended
       when 7
         :high_bg # Above 400
       when 10
@@ -120,7 +136,7 @@ module MinimedRF
     end
 
     def to_s
-      val = "PumpStatus: ##{sequence} #{pump_timestamp} #{sensor_timestamp} - "
+      val = "PumpStatus: ##{sequence} (#{clock_type_str}) #{pump_timestamp} #{sensor_timestamp} - "
 
       case sensor_status
       when :sensor_missing
@@ -129,8 +145,12 @@ module MinimedRF
         val << "Meter BG Now - PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs"
       when :weak_signal
         val << "Weak Signal - Glucose=#{glucose} PreviousGlucose=#{previous_glucose} - SensorAge=#{sensor_age}hrs"
+      when :calibration_error
+        val << "Calibration Error - SensorAge=#{sensor_age}hrs"
       when :sensor_warmup
         val << "Sensor Warmup"
+      when :sensor_ended
+        val << "Sensor Ended"
       when :sensor_lost
         val << "Sensor Lost"
       when :high_bg
@@ -144,7 +164,7 @@ module MinimedRF
       if active_insulin > 0
         val << " ActiveInsulin=#{active_insulin.round(3)}"
       end
-      
+
       unless trend.empty?
         val << " Trend=#{trend}"
       end

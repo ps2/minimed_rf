@@ -1,17 +1,21 @@
 
 module MinimedRF
   module PumpEvents
-    class ChangeBolusWizardSetup < Base
+    class ChangeMaxBasal < Base
       def self.event_type_code
-        0x4f
+        0x2c
       end
 
       def bytesize
-        39
+        7
+      end
+
+      def max_basal
+        d(1) / 40.0
       end
 
       def to_s
-        "ChangeBolusWizardSetup #{timestamp_str}"
+        "ChangeMaxBasal #{max_basal} #{timestamp_str}"
       end
 
       def timestamp

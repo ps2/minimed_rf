@@ -25,6 +25,10 @@ module MinimedRF
       end
     end
 
+    def is_ack?
+      return b(:flags) == 3
+    end
+
     def to_s
       if flags
         "Meter id:#{meter_id} #{flags} raw:#{@data.unpack("H*")}"

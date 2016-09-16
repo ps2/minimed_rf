@@ -1,17 +1,16 @@
-
 module MinimedRF
   module PumpEvents
-    class ChangeBolusWizardSetup < Base
+    class SetAutoOff < Base
       def self.event_type_code
-        0x4f
+        0x1b
       end
 
       def bytesize
-        39
+        7
       end
 
       def to_s
-        "ChangeBolusWizardSetup #{timestamp_str}"
+        "SetAutoOff #{timestamp_str}"
       end
 
       def timestamp

@@ -7,30 +7,32 @@
 
 module MinimedRF
   module PumpEvents
-    class ChangeTempBasalPercent < Base
+    class TempBasalDuration < Base
 
       def self.event_type_code
-        0x33
+        0x16
       end
 
       def bytesize
-        15
+        7
       end
 
       def timestamp
         parse_date(2)
       end
 
-      def percent
-        d(1)
-      end
-
       def duration
-        d(9) / 2.0
+        d(1) * 30
       end
 
       def to_s
-        "ChangeTempBasalPercent #{timestamp_str} pct:#{percent} duration:#{duration}"
+        "TempBasalDuration #{timestamp_str} duration:#{duration}"
+      end
+
+      def as_json
+        super.merge({
+          duration: duration,
+        })
       end
 
     end

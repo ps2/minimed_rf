@@ -1,17 +1,20 @@
+# 210026780D030E
+
+# [2014, 1, 3, 13, 56, 38]
 
 module MinimedRF
   module PumpEvents
-    class ChangeBolusWizardSetup < Base
+    class Questionable3b < Base
       def self.event_type_code
-        0x4f
+        0x3b
       end
 
       def bytesize
-        39
+        7
       end
 
       def to_s
-        "ChangeBolusWizardSetup #{timestamp_str}"
+        "Questionable3b #{timestamp_str}"
       end
 
       def timestamp
