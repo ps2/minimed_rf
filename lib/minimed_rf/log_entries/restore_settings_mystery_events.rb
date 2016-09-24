@@ -5,6 +5,25 @@
 
 module MinimedRF
   module PumpEvents
+    class RestoreMystery2b < Base
+      def self.event_type_code
+        0x2b
+      end
+
+      def bytesize
+        7
+      end
+
+      def to_s
+        "RestoreMystery2b #{timestamp_str}"
+      end
+
+      def timestamp
+        parse_date(2)
+      end
+
+    end
+
     class RestoreMystery51 < Base
       def self.event_type_code
         0x51
@@ -108,7 +127,11 @@ module MinimedRF
       end
 
       def bytesize
-        7
+        if @pump_model.larger
+          9
+        else
+          7
+        end
       end
 
       def to_s
