@@ -27,7 +27,7 @@ module MinimedRF
 
       def rate
         if rate_type == 'absolute'
-          d(1) / 40.0
+          (((d(7) & 0b111) << 8) + d(1)) / 40.0
         else
           d(1)
         end
