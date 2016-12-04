@@ -12,7 +12,7 @@ module MinimedRF
       end
 
       def bytesize
-        14
+        7
       end
 
       def to_s
