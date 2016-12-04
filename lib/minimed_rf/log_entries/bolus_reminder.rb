@@ -1,17 +1,21 @@
-
 module MinimedRF
   module PumpEvents
-    class SelectBasalProfile < Base
+
+    class BolusReminder < Base
       def self.event_type_code
-        0x14
+        0x69
       end
 
       def bytesize
-        7
+        if @pump_model.larger
+          9
+        else
+          7
+        end
       end
 
       def to_s
-        "SelectBasalProfile #{timestamp_str}"
+        "BolusReminder #{timestamp_str}"
       end
 
       def timestamp
