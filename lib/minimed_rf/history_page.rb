@@ -35,7 +35,7 @@ module MinimedRF
         if event
           unless skipped.empty?
             if print
-              puts "************************************************************** Skipped: " + skipped
+              #puts "************************************************************** Skipped: " + skipped
             end
             skipped = ""
           end
@@ -51,7 +51,7 @@ module MinimedRF
           else
             entries << event
           end
-          puts "Offset = #{offset}, block = #{event.bytesize}, type = 0x#{data.getbyte(0).to_s(16)}"
+          #puts "Offset = #{offset}, block = #{event.bytesize}, type = 0x#{data.getbyte(0).to_s(16)}"
           offset += event.bytesize
           @data = @data.byteslice((event.bytesize)..-1)
         else
@@ -59,7 +59,7 @@ module MinimedRF
             print "Unknown history record type: 0x#{"%02x" % data.getbyte(0)}"
             return entries
           end
-          puts "Skipping: Offset = #{offset}"
+          #puts "Skipping: Offset = #{offset}"
           offset += 1
           skipped << "%02x" % data.getbyte(0)
           @data = @data.byteslice(1..-1)
@@ -67,7 +67,7 @@ module MinimedRF
       end
 
       unless skipped.empty? || !print
-        puts "Trailing bytes: " + skipped
+        #puts "Trailing bytes: " + skipped
       end
 
       return entries

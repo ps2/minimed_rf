@@ -8,7 +8,7 @@ describe MinimedRF::HistoryPage do
     expect(history_page.crc_ok?).to eq true
 
     entries = history_page.decode
-    expect(entries.length).to eq 51
+    expect(entries.length).to eq 52
 
     dailytotal = entries[0]
     # entry is for the last day of october,
@@ -20,10 +20,10 @@ describe MinimedRF::HistoryPage do
     expect(dailytotal.valid_date.day).to eq 31
 
 
-    calbg = entries[48]
+    calbg = entries[49]
     expect(calbg.to_s).to eq "CalBGForPH 2015-11-14T20:59:21 amount:100"
 
-    bw = entries[49]
+    bw = entries[50]
     expect(bw.blood_glucose).to eq 100
     expect(bw.bg_target_low).to eq 65
     expect(bw.bg_target_high).to eq 140
