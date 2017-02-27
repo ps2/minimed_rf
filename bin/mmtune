@@ -35,7 +35,7 @@ class MMTune
     if p.nil?
       puts "Nil packet!"
     else
-      puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
+      STDERR.puts "#{Time.now.strftime('%H:%M:%S.%3N')} #{"%3d" % p.rssi} (#{"%3d" % p.sequence}): #{p}"
       #puts "raw: #{p.hex_data}"
     end
   end
@@ -48,6 +48,9 @@ class MMTune
       packet = @rf.get_packet(@rx_channel, 80)
       if packet
         print_packet(packet)
+        unless packet.to_s =~ /GetModel/
+           abort("Invalid response: expected GetModel")
+        end
         awake = true
         break
       end
@@ -59,6 +62,9 @@ class MMTune
       wake_ack = @rf.get_packet(@rx_channel, 9000) # wait 9 s for response
       if wake_ack
         print_packet(wake_ack)
+        unless wake_ack.to_s =~ /PumpStatusAck/
+            abort("Invalid response: expected PumpStatusAck")
+        end
       else
         puts "Pump not responding"
       end
@@ -185,14 +191,14 @@ class MMTune
 
     results = scan_over_freq(916.5, 916.9, 20)
     if results[0][1] > 0
-      puts "Setting to best freq of #{results[0][0]}"
+      STDERR.puts "Setting to best freq of #{results[0][0]}"
       best = results[0][0].to_f
       @rf.set_base_freq(best)
       #continuous_trial
     else
       @rf.set_base_freq(916.630)
+    abort("Unable to determine best freq")
     end
-
 
     #do_rxtx_spacing_test
     #scan_over_rx_bw
